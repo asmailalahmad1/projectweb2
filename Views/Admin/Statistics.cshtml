@@ -1,0 +1,252 @@
+@{
+    ViewData["Title"] = "الإحصائيات";
+}
+
+<!-- ======================================================= -->
+<!-- ==========          Statistics Styles          ========== -->
+<!-- ======================================================= -->
+<style>
+    /* Color Palette Variables */
+    :root {
+        --main-blue: #0077B6; /* أزرق ماء رئيسي */
+        --sky-blue: #90E0EF; /* أزرق سماوي */
+        --white: #FFFFFF; /* أبيض نقي */
+        --soft-gray: #E0E0E0; /* رمادي ناعم */
+        --aqua-green: #00B4D8; /* أخضر مائي */
+        --dark-blue: #03045E; /* أزرق داكن جدًا */
+        /* Semantic Colors for Charts */
+        --success-green: #28a745;
+        --danger-red: #d9534f;
+        --warning-orange: #f0ad4e;
+        --secondary-gray: #6c757d;
+    }
+
+    /* Page Title */
+    .page-title {
+        color: var(--dark-blue);
+        border-bottom: 2px solid var(--sky-blue);
+        padding-bottom: 10px;
+    }
+
+    /* Custom Chart Card Design */
+    .chart-card {
+        border: 1px solid var(--soft-gray);
+        border-radius: 12px;
+        background-color: var(--white);
+        box-shadow: 0 6px 15px rgba(3, 4, 94, 0.08);
+        margin-bottom: 1.5rem; /* Consistent spacing */
+    }
+
+        .chart-card .card-header {
+            background-color: transparent;
+            border-bottom: 1px solid var(--soft-gray);
+        }
+
+            .chart-card .card-header h5 {
+                color: var(--dark-blue);
+                font-weight: bold;
+            }
+
+    /* Placeholder for no data */
+    .no-data-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px; /* Same as chart height */
+        color: var(--secondary-gray);
+        background-color: #f7f9fc;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="page-title"><i class="fas fa-chart-bar"></i> الإحصائيات والتقارير</h2>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card chart-card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-pie"></i> الطلبات حسب الحالة</h5>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.OrdersByStatus != null)
+                {
+                    <canvas id="statusChart" height="250"></canvas>
+                }
+                else
+                {
+                    <div class="no-data-placeholder"><p>لا توجد بيانات متاحة</p></div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card chart-card">
+            <div class="card-header">
+                <h5><i class="fas fa-map-marker-alt"></i> الطلبات حسب المنطقة</h5>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.OrdersByRegion != null)
+                {
+                    <canvas id="regionChart" height="250"></canvas>
+                }
+                else
+                {
+                    <div class="no-data-placeholder"><p>لا توجد بيانات متاحة</p></div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card chart-card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-line"></i> الطلبات والإيرادات الشهرية</h5>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.MonthlyOrders != null)
+                {
+                    <canvas id="monthlyChart" height="120"></canvas>
+                }
+                else
+                {
+                    <div class="no-data-placeholder"><p>لا توجد بيانات متاحة</p></div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default font color to match the theme
+            Chart.defaults.color = '#343a40';
+            Chart.defaults.font.family = 'system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
+
+            // Status Chart
+            @if (ViewBag.OrdersByStatus != null)
+            {
+                    <text>
+                    const statusData = @Html.Raw(Json.Serialize(ViewBag.OrdersByStatus));
+                    const statusCtx = document.getElementById('statusChart').getContext('2d');
+                    new Chart(statusCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: statusData.map(item => {
+                                switch(item.status) {
+                                    case 'New': return 'جديد';
+                                    case 'Accepted': return 'مقبول';
+                                    case 'InDelivery': return 'قيد التوصيل';
+                                    case 'Delivered': return 'تم التسليم';
+                                    case 'Rejected': return 'مرفوض';
+                                    case 'Cancelled': return 'ملغى';
+                                    default: return item.status;
+                                }
+                            }),
+                            datasets: [{
+                                data: statusData.map(item => item.count),
+                                backgroundColor: [
+                                    '#f0ad4e',       // جديد (Warning)
+                                    '#0077B6',       // مقبول (Main Blue)
+                                    '#00B4D8',       // قيد التوصيل (Aqua Green)
+                                    '#28a745',       // تم التسليم (Success Green)
+                                    '#d9534f',       // مرفوض (Danger Red)
+                                    '#6c757d'        // ملغى (Secondary Gray)
+                                ],
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                    </text>
+            }
+
+            // Region Chart
+            @if (ViewBag.OrdersByRegion != null)
+            {
+                    <text>
+                    const regionData = @Html.Raw(Json.Serialize(ViewBag.OrdersByRegion));
+                    const regionCtx = document.getElementById('regionChart').getContext('2d');
+                    new Chart(regionCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: regionData.map(item => item.region),
+                            datasets: [{
+                                data: regionData.map(item => item.count),
+                                backgroundColor: [
+                                    '#0077B6', '#00B4D8', '#90E0EF', '#03045E', '#48cae4', '#ade8f4' // Palette colors
+                                ],
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                    </text>
+            }
+
+            // Monthly Chart
+            @if (ViewBag.MonthlyOrders != null)
+            {
+                    <text>
+                    const monthlyData = @Html.Raw(Json.Serialize(ViewBag.MonthlyOrders));
+                    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+                    new Chart(monthlyCtx, {
+                        type: 'bar', // Bar chart is often better for comparing two different units
+                        data: {
+                            labels: monthlyData.map(item => item.month),
+                            datasets: [{
+                                label: 'عدد الطلبات',
+                                data: monthlyData.map(item => item.count),
+                                backgroundColor: 'rgba(0, 180, 216, 0.7)', // Aqua Green
+                                borderColor: '#00B4D8',
+                                yAxisID: 'y',
+                                order: 2
+                            }, {
+                                type: 'line', // Mix chart type
+                                label: 'الإيرادات',
+                                data: monthlyData.map(item => item.revenue),
+                                borderColor: '#03045E', // Dark Blue
+                                backgroundColor: 'rgba(3, 4, 94, 0.2)',
+                                fill: true,
+                                tension: 0.3,
+                                yAxisID: 'y1',
+                                order: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: { mode: 'index', intersect: false },
+                            scales: {
+                                x: { grid: { display: false } },
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: { display: true, text: 'عدد الطلبات' },
+                                    grid: { color: '#e0e0e0' }
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: { display: true, text: 'الإيرادات' },
+                                    grid: { drawOnChartArea: false },
+                                }
+                            }
+                        }
+                    });
+                    </text>
+            }
+        });
+    </script>
+}

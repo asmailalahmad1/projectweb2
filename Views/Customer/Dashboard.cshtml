@@ -1,0 +1,254 @@
+@model Customer
+@{
+    ViewData["Title"] = "لوحة تحكم الزبون";
+}
+
+<!-- ======================================================= -->
+<!-- ==========       Customer Dashboard Styles     ========== -->
+<!-- ======================================================= -->
+<style>
+    /* Color Palette Variables */
+    :root {
+        --main-blue: #0077B6; /* أزرق ماء رئيسي */
+        --sky-blue: #90E0EF; /* أزرق سماوي */
+        --white: #FFFFFF; /* أبيض نقي */
+        --soft-gray: #E0E0E0; /* رمادي ناعم */
+        --aqua-green: #00B4D8; /* أخضر مائي */
+        --dark-blue: #03045E; /* أزرق داكن جدًا */
+        --danger-red: #d9534f;
+    }
+
+    /* Page background and general text */
+    .dashboard-body {
+        background-color: #f7f9fc; /* A very light gray, almost white, for slight contrast */
+    }
+
+    .page-title, .content-card .card-header h5 {
+        color: var(--dark-blue);
+        font-weight: bold;
+    }
+
+    /* Statistic Cards */
+    .stat-card {
+        border-radius: 8px;
+        color: var(--white);
+        border: none;
+    }
+
+        .stat-card .card-body h5 {
+            color: var(--white);
+            font-weight: normal;
+            opacity: 0.9;
+        }
+
+        .stat-card .card-body h3 {
+            font-weight: bold;
+        }
+
+    .stat-card-main {
+        background-color: var(--main-blue);
+    }
+
+    .stat-card-success {
+        background-color: var(--aqua-green);
+    }
+
+    .stat-card-pending {
+        background-color: var(--sky-blue);
+        color: var(--dark-blue);
+    }
+
+        .stat-card-pending h5, .stat-card-pending h3 {
+            color: var(--dark-blue);
+        }
+
+    .stat-card i {
+        opacity: 0.7;
+    }
+
+    /* Content Cards (for actions and order list) */
+    .content-card {
+        border: 1px solid var(--soft-gray);
+        border-radius: 8px;
+        background-color: var(--white);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+        .content-card .card-header {
+            background-color: transparent;
+            border-bottom: 1px solid var(--soft-gray);
+        }
+
+    /* Action Buttons */
+    .btn-main-action {
+        background-color: var(--aqua-green);
+        color: var(--white);
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-main-action:hover {
+            background-color: var(--main-blue);
+            color: var(--white);
+        }
+
+    .btn-secondary-action {
+        background-color: transparent;
+        color: var(--main-blue);
+        border: 2px solid var(--main-blue);
+    }
+
+        .btn-secondary-action:hover {
+            background-color: var(--main-blue);
+            color: var(--white);
+        }
+
+    /* Recent Orders List */
+    .recent-orders-list .list-group-item {
+        border-left: none;
+        border-right: none;
+        border-top: 1px solid var(--soft-gray);
+        background: transparent;
+    }
+
+        .recent-orders-list .list-group-item:first-child {
+            border-top: none;
+        }
+
+    .recent-orders-list h6 {
+        color: var(--dark-blue);
+    }
+
+    /* Order Statuses Text */
+    .status-delivered {
+        color: var(--aqua-green);
+        font-weight: bold;
+    }
+
+    .status-in-progress {
+        color: var(--main-blue);
+        font-weight: bold;
+    }
+
+    .status-new {
+        color: #6c757d;
+        font-weight: bold;
+    }
+
+    .status-rejected {
+        color: var(--danger-red);
+        font-weight: bold;
+    }
+</style>
+
+<div class="dashboard-body">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="page-title">
+                <i class="fas fa-user-circle"></i> مرحباً @Model.User.FullName
+            </h2>
+            <p class="text-muted">المنطقة: @Model.Region.Name</p>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card stat-card stat-card-main">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5>إجمالي الطلبات</h5>
+                            <h3>@Model.Orders.Count</h3>
+                        </div>
+                        <i class="fas fa-shopping-cart fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card stat-card-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5>الطلبات المكتملة</h5>
+                            <h3>@Model.Orders.Count(o => o.Status == "Delivered")</h3>
+                        </div>
+                        <i class="fas fa-check-circle fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card stat-card-pending">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5>الطلبات المعلقة</h5>
+                            <h3>@Model.Orders.Count(o => o.Status == "New" || o.Status == "Accepted" || o.Status == "InDelivery")</h3>
+                        </div>
+                        <i class="fas fa-hourglass-half fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card content-card h-100">
+                <div class="card-header">
+                    <h5><i class="fas fa-bolt"></i> إجراءات سريعة</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-3">
+                        <a href="@Url.Action("Tanks", "Customer")" class="btn btn-main-action btn-lg">
+                            <i class="fas fa-water"></i> طلب مياه جديد
+                        </a>
+                        <a href="@Url.Action("TrackOrders", "Customer")" class="btn btn-secondary-action btn-lg">
+                            <i class="fas fa-receipt"></i> تتبع طلباتي
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card content-card h-100">
+                <div class="card-header">
+                    <h5><i class="fas fa-history"></i> آخر الطلبات</h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (ViewBag.RecentOrders != null && ((List<Order>)ViewBag.RecentOrders).Any())
+                    {
+                        <div class="list-group list-group-flush recent-orders-list">
+                            @foreach (var order in (List<Order>)ViewBag.RecentOrders)
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">@order.Tank.Name</h6>
+                                        <small class="text-muted">@order.OrderTime.ToString("dd/MM/yyyy")</small>
+                                    </div>
+                                    <p class="mb-1 text-muted">الكمية: @order.Quantity برميل</p>
+                                    <small class="@(order.Status == "Delivered" ? "status-delivered" :
+                                                                                                order.Status == "Rejected" || order.Status == "Cancelled" ? "status-rejected" :
+                                                                                                order.Status == "New" ? "status-new" : "status-in-progress")">
+                                        @(order.Status == "New" ? "جديد" :
+                                                                        order.Status == "Accepted" ? "مقبول" :
+                                                                        order.Status == "InDelivery" ? "قيد التوصيل" :
+                                                                        order.Status == "Delivered" ? "تم التسليم" :
+                                                                        order.Status == "Rejected" ? "مرفوض" : "ملغى")
+                            </small>
+                        </div>
+                                                }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-3">
+                            <p class="text-muted text-center mb-0">لا توجد طلبات حتى الآن</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

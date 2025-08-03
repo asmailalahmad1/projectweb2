@@ -1,0 +1,244 @@
+@model Region
+@{
+    ViewData["Title"] = "تفاصيل المنطقة";
+}
+
+<style>
+    /* Color Palette Variables */
+    :root {
+        --main-blue: #0077B6;
+        --sky-blue: #90E0EF;
+        --white: #FFFFFF;
+        --soft-gray: #E0E0E0;
+        --aqua-green: #00B4D8;
+        --dark-blue: #023E8A;
+        --text-dark: #343A40;
+    }
+
+    .page-title {
+        color: var(--dark-blue);
+        border-bottom: 2px solid var(--sky-blue);
+        padding-bottom: 10px;
+        margin-bottom: 2rem;
+    }
+
+    .details-card {
+        background: var(--white);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--soft-gray);
+        margin-bottom: 2rem;
+    }
+
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--soft-gray);
+    }
+
+    .detail-item:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        color: var(--text-dark);
+        flex: 0 0 200px;
+    }
+
+    .detail-value {
+        color: var(--text-dark);
+        flex: 1;
+        text-align: left;
+    }
+
+    .count-badge {
+        background-color: var(--main-blue);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .btn-back {
+        background-color: var(--soft-gray);
+        color: var(--text-dark);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-back:hover {
+        background-color: #d0d0d0;
+        color: var(--text-dark);
+        text-decoration: none;
+    }
+
+    .btn-edit {
+        background-color: #FFA500;
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-edit:hover {
+        background-color: #e6940a;
+        color: white;
+        text-decoration: none;
+    }
+
+    .section-title {
+        color: var(--dark-blue);
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid var(--sky-blue);
+        padding-bottom: 0.5rem;
+    }
+
+    .list-group-item {
+        border: 1px solid var(--soft-gray);
+        background-color: var(--white);
+    }
+
+    .list-group-item:hover {
+        background-color: var(--sky-blue);
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="page-title"><i class="fas fa-map-marker-alt"></i> تفاصيل المنطقة</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="details-card">
+                <div class="detail-item">
+                    <span class="detail-label">اسم المنطقة:</span>
+                    <span class="detail-value"><strong>@Model.Name</strong></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">عدد الزبائن:</span>
+                    <span class="detail-value">
+                        <span class="count-badge">@Model.Customers.Count</span>
+                    </span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">عدد السائقين:</span>
+                    <span class="detail-value">
+                        <span class="count-badge">@Model.Drivers.Count</span>
+                    </span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">عدد الخزانات المخدومة:</span>
+                    <span class="detail-value">
+                        <span class="count-badge">@Model.TankRegions.Count</span>
+                    </span>
+                </div>
+            </div>
+
+            @if (Model.Customers.Any())
+            {
+                <div class="details-card">
+                    <h4 class="section-title">الزبائن في هذه المنطقة</h4>
+                    <div class="list-group">
+                        @foreach (var customer in Model.Customers.Take(10))
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@customer.User.FullName</strong>
+                                    <br>
+                                    <small class="text-muted">@customer.User.Email</small>
+                                </div>
+                                <span class="badge bg-primary">@customer.Orders.Count طلب</span>
+                            </div>
+                        }
+                        @if (Model.Customers.Count > 10)
+                        {
+                            <div class="list-group-item text-center text-muted">
+                                وعدد @(Model.Customers.Count - 10) زبون آخر...
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.Drivers.Any())
+            {
+                <div class="details-card">
+                    <h4 class="section-title">السائقين في هذه المنطقة</h4>
+                    <div class="list-group">
+                        @foreach (var driver in Model.Drivers.Take(10))
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@driver.User.FullName</strong>
+                                    <br>
+                                    <small class="text-muted">@driver.User.PhoneNumber</small>
+                                </div>
+                                <span class="badge bg-success">@driver.Orders.Count(o => o.Status == "Delivered") مكتمل</span>
+                            </div>
+                        }
+                        @if (Model.Drivers.Count > 10)
+                        {
+                            <div class="list-group-item text-center text-muted">
+                                وعدد @(Model.Drivers.Count - 10) سائق آخر...
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.TankRegions.Any())
+            {
+                <div class="details-card">
+                    <h4 class="section-title">الخزانات المخدومة لهذه المنطقة</h4>
+                    <div class="list-group">
+                        @foreach (var tankRegion in Model.TankRegions)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@tankRegion.Tank.Name</strong>
+                                    <br>
+                                    <small class="text-muted">@tankRegion.Tank.WaterType - @tankRegion.Tank.Location</small>
+                                </div>
+                                <span class="badge bg-info">@tankRegion.Tank.PricePerBarrel.ToString("C")</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-4">
+            <div class="details-card">
+                <h5 class="section-title">الإجراءات</h5>
+                <div class="d-grid gap-2">
+                    <a href="@Url.Action("EditRegion", new { id = Model.Id })" class="btn-edit">
+                        <i class="fas fa-edit"></i> تعديل المنطقة
+                    </a>
+                    <a href="@Url.Action("ManageRegions")" class="btn-back">
+                        <i class="fas fa-arrow-right"></i> العودة للقائمة
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

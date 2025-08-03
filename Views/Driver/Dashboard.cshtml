@@ -1,0 +1,197 @@
+@model Driver
+@{
+    ViewData["Title"] = "لوحة تحكم السائق";
+}
+
+
+
+<div class="animate-fade-in-up">
+    <!-- العنوان الرئيسي -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="unified-title h2">
+                <i class="fas fa-truck me-2"></i>
+                مرحباً @Model.User.FullName
+            </h1>
+            <p class="text-secondary">المنطقة: @Model.Region.Name</p>
+        </div>
+    </div>
+
+    <!-- بطاقات الإحصائيات -->
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="unified-stat-card">
+                <div class="unified-icon blue mb-3 mx-auto">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <div class="unified-stat-number">@ViewBag.TodayOrders.Count</div>
+                <div class="unified-stat-label">طلبات اليوم</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="unified-stat-card">
+                <div class="unified-icon green mb-3 mx-auto">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="unified-stat-number">@ViewBag.CompletedToday</div>
+                <div class="unified-stat-label">مكتملة اليوم</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="unified-stat-card">
+                <div class="unified-icon orange mb-3 mx-auto">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <div class="unified-stat-number">@ViewBag.PendingToday</div>
+                <div class="unified-stat-label">قيد التوصيل</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="unified-stat-card">
+                <div class="unified-icon purple mb-3 mx-auto">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="unified-stat-number">@ViewBag.PendingOrders.Count</div>
+                <div class="unified-stat-label">طلبات معلقة</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- قسم الطلبات المعلقة -->
+        <div class="col-lg-6 mb-4">
+            <div class="unified-card">
+                <h3 class="unified-title h4 mb-4">
+                    <i class="fas fa-clock me-2"></i>
+                    الطلبات المعلقة
+                </h3>
+                
+                <div style="max-height: 400px; overflow-y: auto;">
+                    @if (ViewBag.PendingOrders != null && ((List<Order>)ViewBag.PendingOrders).Any())
+                    {
+                        @foreach (var order in (List<Order>)ViewBag.PendingOrders)
+                        {
+                            <div class="d-flex align-items-center p-3 mb-3 rounded" style="background: rgba(237, 137, 54, 0.1); border-right: 4px solid var(--accent-orange);">
+                                <div class="unified-icon orange me-3">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1 text-primary">طلب #@order.Id</h6>
+                                    <p class="mb-1 text-secondary small">@order.Customer.User.FullName</p>
+                                    <p class="mb-1 text-muted small">@order.Tank.Name - @order.Quantity برميل</p>
+                                    <small class="text-muted">@order.OrderTime.ToString("dd/MM/yyyy HH:mm")</small>
+                                </div>
+                                <div class="text-end">
+                                    <form asp-controller="Driver" asp-action="AcceptOrder" method="post" class="d-inline">
+                                        <input type="hidden" name="orderId" value="@order.Id" />
+                                        <button type="submit" class="unified-btn success btn-sm">
+                                            <i class="fas fa-check me-1"></i>
+                                            قبول
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <div class="unified-icon orange mb-3 mx-auto">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <p class="text-muted">لا توجد طلبات معلقة</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- قسم طلبات اليوم -->
+        <div class="col-lg-6 mb-4">
+            <div class="unified-card">
+                <h3 class="unified-title h4 mb-4">
+                    <i class="fas fa-tasks me-2"></i>
+                    طلبات اليوم
+                </h3>
+                
+                <div style="max-height: 400px; overflow-y: auto;">
+                    @if (ViewBag.TodayOrders != null && ((List<Order>)ViewBag.TodayOrders).Any())
+                    {
+                        @foreach (var order in (List<Order>)ViewBag.TodayOrders)
+                        {
+                            <div class="d-flex align-items-center p-3 mb-3 rounded" style="background: rgba(107, 70, 193, 0.1); border-right: 4px solid var(--primary-purple);">
+                                <div class="unified-icon 
+                                    @(order.Status == "Accepted" ? "blue" :
+                                      order.Status == "InDelivery" ? "purple" :
+                                      order.Status == "Delivered" ? "green" : "orange") me-3">
+                                    <i class="fas fa-
+                                        @(order.Status == "Accepted" ? "check" :
+                                          order.Status == "InDelivery" ? "truck" :
+                                          order.Status == "Delivered" ? "check-circle" : "clock")"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1 text-primary">طلب #@order.Id</h6>
+                                    <p class="mb-1 text-secondary small">@order.Customer.User.FullName</p>
+                                    <p class="mb-1 text-muted small">@order.Tank.Name - @order.Quantity برميل</p>
+                                    <small class="text-muted">@order.OrderTime.ToString("HH:mm")</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge 
+                                        @(order.Status == "Accepted" ? "bg-info" :
+                                          order.Status == "InDelivery" ? "bg-primary" :
+                                          order.Status == "Delivered" ? "bg-success" : "bg-warning")">
+                                        @(order.Status == "Accepted" ? "مقبول" :
+                                          order.Status == "InDelivery" ? "قيد التوصيل" :
+                                          order.Status == "Delivered" ? "تم التسليم" : "معلق")
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <div class="unified-icon blue mb-3 mx-auto">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <p class="text-muted">لا توجد طلبات لليوم</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- إجراءات سريعة -->
+    <div class="row">
+        <div class="col-12">
+            <div class="unified-card">
+                <h3 class="unified-title h4 mb-4">
+                    <i class="fas fa-bolt me-2"></i>
+                    إجراءات سريعة
+                </h3>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <a href="@Url.Action("AssignedOrders", "Driver")" class="unified-btn primary w-100 text-decoration-none">
+                            <i class="fas fa-list-ul me-2"></i>
+                            عرض جميع الطلبات
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a href="@Url.Action("Dashboard", "Driver")" class="unified-btn success w-100 text-decoration-none">
+                            <i class="fas fa-sync-alt me-2"></i>
+                            تحديث البيانات
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <button class="unified-btn info w-100" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>
+                            طباعة التقرير
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

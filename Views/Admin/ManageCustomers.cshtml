@@ -1,0 +1,258 @@
+@model IEnumerable<Customer>
+@{
+    ViewData["Title"] = "إدارة الزبائن";
+}
+
+<!-- ======================================================= -->
+<!-- ==========      Customer Management Styles     ========== -->
+<!-- ======================================================= -->
+<style>
+    /* Color Palette Variables */
+    :root {
+        --main-blue: #0077B6;
+        --sky-blue: #90E0EF;
+        --white: #FFFFFF;
+        --soft-gray: #E0E0E0;
+        --table-stripe: #f8f9fa;
+        --aqua-green: #00B4D8;
+        --dark-blue: #03045E;
+        /* Semantic Colors */
+        --success-green: #28a745;
+        --danger-red: #d9534f;
+        --warning-orange: #ffc107;
+        --info-cyan: #17a2b8;
+        --secondary-gray: #6c757d;
+    }
+
+    /* Page Title */
+    .page-title {
+        color: var(--dark-blue);
+        border-bottom: 2px solid var(--sky-blue);
+        padding-bottom: 10px;
+        margin-bottom: 2rem;
+    }
+
+    /* Custom Table Design */
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table-custom thead tr {
+            background-color: var(--dark-blue);
+            color: #FFFFFF;
+            text-align: right;
+        }
+
+        .table-custom th, .table-custom td {
+            padding: 12px 15px;
+            vertical-align: middle;
+            color: #333;
+        }
+
+        .table-custom tbody tr {
+            border-bottom: 1px solid var(--soft-gray);
+            background-color: var(--white);
+        }
+
+            .table-custom tbody tr:nth-of-type(even) {
+                background-color: var(--table-stripe);
+            }
+
+            .table-custom tbody tr:hover {
+                background-color: var(--sky-blue);
+                color: var(--dark-blue);
+            }
+
+    /* Phone link styling */
+    .phone-link {
+        color: var(--main-blue);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+        .phone-link:hover {
+            text-decoration: underline;
+        }
+
+    /* Count & Status Badges */
+    .styled-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: #FFFFFF;
+        display: inline-block;
+        min-width: 60px;
+        text-align: center;
+    }
+
+    .badge-orders {
+        background-color: var(--main-blue);
+    }
+
+    .badge-active {
+        background-color: var(--success-green);
+    }
+
+    .badge-locked {
+        background-color: var(--danger-red);
+    }
+
+    .badge-confirmed {
+        background-color: var(--aqua-green);
+    }
+
+    .badge-unconfirmed {
+        background-color: var(--secondary-gray);
+    }
+
+    /* Action Buttons styling */
+    .action-buttons .btn {
+        margin: 0 2px; /* Add small margin between buttons */
+    }
+
+    .btn-details {
+        color: var(--info-cyan);
+        border-color: var(--info-cyan);
+    }
+
+        .btn-details:hover {
+            background-color: var(--info-cyan);
+            color: white;
+        }
+
+    .btn-edit {
+        color: var(--warning-orange);
+        border-color: var(--warning-orange);
+    }
+
+        .btn-edit:hover {
+            background-color: var(--warning-orange);
+            color: white;
+        }
+
+    .btn-delete {
+        color: var(--danger-red);
+        border-color: var(--danger-red);
+    }
+
+        .btn-delete:hover {
+            background-color: var(--danger-red);
+            color: white;
+        }
+
+
+    /* Custom Alert */
+    .alert-custom-info {
+        background-color: var(--sky-blue);
+        color: var(--dark-blue);
+        border: 1px solid var(--aqua-green);
+        border-radius: 8px;
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="page-title"><i class="fas fa-users-cog me-2"></i> إدارة الزبائن</h2>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive mt-4">
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th>الاسم الكامل</th>
+                        <th>البريد الإلكتروني</th>
+                        <th>رقم الهاتف</th>
+                        <th>العنوان</th>
+                        <th>المنطقة</th>
+                        <th>عدد الطلبات</th>
+                        <th>الحساب مؤكد</th>
+                        <th>الحالة</th>
+                        <th class="text-center">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var customer in Model)
+                    {
+                        <tr>
+                            <td><strong>@customer.User.FullName</strong></td>
+                            <td>@customer.User.Email</td>
+                            <td>
+                                <a href="tel:@customer.User.PhoneNumber" class="phone-link">
+                                    <i class="fas fa-phone-alt me-1"></i> @customer.User.PhoneNumber
+                                </a>
+                            </td>
+                            <td>@customer.User.Address</td>
+                            <td>@(customer.Region?.Name ?? "غير محدد")</td>
+                            <td class="text-center">
+                                <span class="styled-badge badge-orders">@customer.Orders.Count</span>
+                            </td>
+                            <td class="text-center">
+                                @if (customer.User.EmailConfirmed)
+                                {
+                                    <span class="styled-badge badge-confirmed">نعم</span>
+                                }
+                                else
+                                {
+                                    <span class="styled-badge badge-unconfirmed">لا</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (customer.User.LockoutEnd == null || customer.User.LockoutEnd < DateTimeOffset.Now)
+                                {
+                                    <span class="styled-badge badge-active">نشط</span>
+                                }
+                                else
+                                {
+                                    <span class="styled-badge badge-locked">محظور</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <!-- ============================================ -->
+                                <!-- === الكود المصحح لأزرار الإجراءات === -->
+                                <!-- ============================================ -->
+                                <div class="action-buttons d-inline-flex align-items-center">
+                                    <!-- زر التفاصيل -->
+                                    <a href="@Url.Action("CustomerDetails", new { id = customer.Id })" class="btn btn-details btn-sm" title="عرض التفاصيل">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+
+                                    <!-- زر التعديل -->
+                                    <a href="@Url.Action("EditCustomer", new { id = customer.Id })" class="btn btn-edit btn-sm" title="تعديل">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <!-- زر الحذف الصحيح -->
+                                    <form asp-action="DeleteCustomer" asp-route-id="@customer.Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-delete btn-sm" title="حذف"
+                                                onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا العميل؟ سيتم حذف جميع طلباته وحسابه بشكل دائم.');">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <!-- ============================================ -->
+                                <!-- ===          نهاية الكود المصحح          === -->
+                                <!-- ============================================ -->
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-custom-info mt-4 p-4 text-center">
+            <h5><i class="fas fa-info-circle me-2"></i> لا يوجد زبائن مسجلون حتى الآن.</h5>
+        </div>
+    }
+</div>

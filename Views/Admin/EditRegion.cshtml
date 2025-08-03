@@ -1,0 +1,128 @@
+@model Region
+@{
+    ViewData["Title"] = "تعديل المنطقة";
+}
+
+<style>
+    /* Color Palette Variables */
+    :root {
+        --main-blue: #0077B6;
+        --sky-blue: #90E0EF;
+        --white: #FFFFFF;
+        --soft-gray: #E0E0E0;
+        --aqua-green: #00B4D8;
+        --dark-blue: #023E8A;
+        --text-dark: #343A40;
+    }
+
+    .page-title {
+        color: var(--dark-blue);
+        border-bottom: 2px solid var(--sky-blue);
+        padding-bottom: 10px;
+        margin-bottom: 2rem;
+    }
+
+    .form-card {
+        background: var(--white);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--soft-gray);
+    }
+
+    .form-label {
+        color: var(--text-dark);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        border: 1px solid var(--soft-gray);
+        border-radius: 8px;
+        padding: 0.75rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--main-blue);
+        box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.1);
+        outline: none;
+    }
+
+    .btn-save {
+        background-color: var(--main-blue);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-save:hover {
+        background-color: var(--dark-blue);
+        transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+        background-color: var(--soft-gray);
+        color: var(--text-dark);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+        background-color: #d0d0d0;
+        color: var(--text-dark);
+        text-decoration: none;
+    }
+
+    .text-danger {
+        color: #DC3545;
+        font-size: 0.875rem;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="page-title"><i class="fas fa-map-marker-alt"></i> تعديل المنطقة</h2>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-card">
+                <form asp-action="EditRegion" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">اسم المنطقة</label>
+                        <input asp-for="Name" class="form-control" placeholder="أدخل اسم المنطقة" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex gap-3 mt-4">
+                        <button type="submit" class="btn btn-save">
+                            <i class="fas fa-save"></i> حفظ التغييرات
+                        </button>
+                        <a href="@Url.Action("ManageRegions")" class="btn-cancel">
+                            <i class="fas fa-times"></i> إلغاء
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - نظام سقيا لإدارة المياه</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="~/css/unified-theme.css" rel="stylesheet" asp-append-version="true" />
+    
+    <style>
+        /* تخصيصات إضافية للتخطيط الرئيسي */
+        .main-wrapper {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            padding: var(--spacing-xl) var(--spacing-md);
+        }
+        
+        /* شريط التنقل الموحد */
+        .unified-navbar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(160, 174, 192, 0.2);
+            padding: var(--spacing-md) 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .navbar-brand-unified {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .navbar-brand-unified:hover {
+            color: var(--primary-purple);
+        }
+        
+        .navbar-brand-icon {
+            background: var(--accent-green);
+            width: 40px;
+            height: 40px;
+            border-radius: var(--border-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .navbar-nav-unified .nav-link {
+            color: var(--text-secondary);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius-sm);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin: 0 var(--spacing-xs);
+        }
+        
+        .navbar-nav-unified .nav-link:hover,
+        .navbar-nav-unified .nav-link.active {
+            color: var(--text-primary);
+            background: rgba(107, 70, 193, 0.2);
+        }
+        
+        .dropdown-menu-unified {
+            background: var(--card-bg);
+            border: 1px solid rgba(160, 174, 192, 0.2);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(20px);
+            padding: var(--spacing-sm);
+        }
+        
+        .dropdown-item-unified {
+            color: var(--text-secondary);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius-sm);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .dropdown-item-unified:hover {
+            color: var(--text-primary);
+            background: rgba(107, 70, 193, 0.2);
+        }
+        
+        /* التذييل الموحد */
+        .unified-footer {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(160, 174, 192, 0.2);
+            padding: var(--spacing-xl) 0;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: auto;
+        }
+        
+        /* الرسائل والتنبيهات */
+        .alert-dismissible .btn-close {
+            color: inherit;
+            opacity: 0.7;
+        }
+        
+        .alert-dismissible .btn-close:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <header>
+            <nav class="unified-navbar">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <a class="navbar-brand-unified" asp-area="" asp-controller="Home" asp-action="Index">
+                            <div class="navbar-brand-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <span>نظام سقيا لإدارة المياه</span>
+                        </a>
+                        
+                        <div class="d-flex align-items-center">
+                            <ul class="navbar-nav-unified d-flex flex-row align-items-center mb-0">
+                                @if (User.Identity!.IsAuthenticated)
+                                {
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">
+                                                <i class="fas fa-tachometer-alt me-1"></i> لوحة التحكم
+                                            </a>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-cogs me-1"></i> الإدارة
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-unified">
+                                                <li><a class="dropdown-item-unified" asp-controller="Admin" asp-action="ManageOrders">
+                                                    <i class="fas fa-clipboard-list me-2"></i>إدارة الطلبات
+                                                </a></li>
+                                                <li><a class="dropdown-item-unified" asp-controller="Admin" asp-action="ManageCustomers">
+                                                    <i class="fas fa-users me-2"></i>إدارة الزبائن
+                                                </a></li>
+                                                <li><a class="dropdown-item-unified" asp-controller="Admin" asp-action="ManageDrivers">
+                                                    <i class="fas fa-truck me-2"></i>إدارة السائقين
+                                                </a></li>
+                                                <li><a class="dropdown-item-unified" asp-controller="Admin" asp-action="ManageRegions">
+                                                    <i class="fas fa-map-marker-alt me-2"></i>إدارة المناطق
+                                                </a></li>
+                                                <li><a class="dropdown-item-unified" asp-controller="Admin" asp-action="ManageTanks">
+                                                    <i class="fas fa-database me-2"></i>إدارة الخزانات
+                                                </a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item-unified" asp-controller="Admin" asp-action="Statistics">
+                                                    <i class="fas fa-chart-bar me-2"></i>الإحصائيات
+                                                </a></li>
+                                            </ul>
+                                        </li>
+                                    }
+                                    else if (User.IsInRole("Customer"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="Customer" asp-action="Dashboard">
+                                                <i class="fas fa-tachometer-alt me-1"></i> لوحة التحكم
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="Customer" asp-action="Tanks">
+                                                <i class="fas fa-database me-1"></i> الخزانات
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="Customer" asp-action="TrackOrders">
+                                                <i class="fas fa-clipboard-list me-1"></i> طلباتي
+                                            </a>
+                                        </li>
+                                    }
+                                    else if (User.IsInRole("Driver"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="Driver" asp-action="Dashboard">
+                                                <i class="fas fa-tachometer-alt me-1"></i> لوحة التحكم
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="Driver" asp-action="AssignedOrders">
+                                                <i class="fas fa-clipboard-list me-1"></i> طلباتي
+                                            </a>
+                                        </li>
+                                    }
+                                    
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-user-circle me-1"></i> @User.Identity.Name
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-unified dropdown-menu-end">
+                                            <li>
+                                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                                    <button type="submit" class="dropdown-item-unified border-0 bg-transparent w-100 text-start">
+                                                        <i class="fas fa-sign-out-alt me-2"></i>تسجيل الخروج
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Account" asp-action="Login">
+                                            <i class="fas fa-sign-in-alt me-1"></i> تسجيل الدخول
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Account" asp-action="Register">
+                                            <i class="fas fa-user-plus me-1"></i> التسجيل
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+        <div class="content-wrapper">
+            <div class="container-fluid">
+                @if (TempData["Success"] != null)
+                {
+                    <div class="unified-alert success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        @TempData["Success"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <div class="unified-alert danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        @TempData["Error"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+                
+                <main role="main" class="animate-fade-in-up">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+        
+        <footer class="unified-footer">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-md-start text-center">
+                        <p class="mb-0">© 2024 - نظام سقيا لإدارة المياه - جميع الحقوق محفوظة</p>
+                    </div>
+                    <div class="col-md-6 text-md-end text-center">
+                        <p class="mb-0">
+                            <i class="fas fa-tint text-primary me-1"></i>
+                            نظام متطور لإدارة توزيع المياه
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

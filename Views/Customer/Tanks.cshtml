@@ -1,0 +1,154 @@
+@model IEnumerable<Tank>
+@{
+    ViewData["Title"] = "الخزانات المتاحة";
+}
+
+<!-- ======================================================= -->
+<!-- ==========        Available Tanks Styles       ========== -->
+<!-- ======================================================= -->
+<style>
+    /* Color Palette Variables */
+    :root {
+        --main-blue: #0077B6; /* أزرق ماء رئيسي */
+        --sky-blue: #90E0EF; /* أزرق سماوي */
+        --white: #FFFFFF; /* أبيض نقي */
+        --soft-gray: #E0E0E0; /* رمادي ناعم */
+        --aqua-green: #00B4D8; /* أخضر مائي */
+        --dark-blue: #03045E; /* أزرق داكن جدًا */
+    }
+
+    /* Page Title */
+    .page-title {
+        color: var(--dark-blue);
+        border-bottom: 2px solid var(--sky-blue);
+        padding-bottom: 10px;
+    }
+
+    /* Custom Tank Card Design */
+    .tank-card {
+        border: 1px solid var(--soft-gray);
+        border-radius: 12px;
+        background-color: var(--white);
+        box-shadow: 0 6px 15px rgba(3, 4, 94, 0.08); /* Shadow from dark-blue */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .tank-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(3, 4, 94, 0.12);
+        }
+
+        .tank-card .card-header {
+            background-color: var(--main-blue);
+            color: var(--white);
+            border-bottom: none;
+            border-top-left-radius: 11px;
+            border-top-right-radius: 11px;
+        }
+
+            .tank-card .card-header .card-title {
+                color: var(--white);
+                font-weight: bold;
+            }
+
+        .tank-card .card-body {
+            color: #555;
+            flex-grow: 1; /* Makes the body fill available space */
+        }
+
+            .tank-card .card-body strong {
+                color: var(--dark-blue);
+            }
+
+        .tank-card .price-display {
+            color: var(--main-blue);
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .tank-card .card-footer {
+            background-color: transparent;
+            border-top: 1px solid var(--soft-gray);
+            padding: 1rem;
+        }
+
+    /* Order Button */
+    .btn-order {
+        background-color: var(--aqua-green);
+        color: var(--white);
+        border: none;
+        padding: 10px 15px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-order:hover {
+            background-color: var(--main-blue);
+            color: var(--white);
+        }
+
+    /* Custom Alert for no tanks */
+    .alert-custom-info {
+        background-color: var(--sky-blue);
+        color: var(--dark-blue);
+        border: 1px solid var(--aqua-green);
+        border-radius: 8px;
+        padding: 15px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="page-title"><i class="fas fa-water"></i> الخزانات المتاحة في منطقتك</h2>
+    </div>
+</div>
+
+@if (Model.Any())
+{
+    <div class="row mt-4">
+        @foreach (var tank in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card tank-card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-tint"></i> @tank.Name
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <strong>نوع المياه:</strong> @tank.WaterType
+                        </div>
+                        <div class="mb-2">
+                            <strong>السعة:</strong> @tank.Capacity لتر
+                        </div>
+                        <div class="mb-2">
+                            <strong>الموقع:</strong> @tank.Location
+                        </div>
+                        <div class="mb-3">
+                            <strong>السعر:</strong>
+                            <span class="price-display">@tank.PricePerBarrel.ToString("C") / برميل</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="@Url.Action("CreateOrder", "Customer", new { tankId = tank.Id })"
+                           class="btn btn-order">
+                            <i class="fas fa-shopping-cart"></i> اطلب الآن
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-custom-info mt-4">
+        <i class="fas fa-info-circle"></i> لا توجد خزانات متاحة في منطقتك حالياً.
+    </div>
+}

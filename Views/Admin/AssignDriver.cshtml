@@ -1,0 +1,178 @@
+@model Order
+@{
+    ViewData["Title"] = "تعيين سائق للطلب";
+    Layout = "_Layout";
+}
+
+<!-- ======================================================= -->
+<!-- ==========        Assign Driver Form Styles    ========== -->
+<!-- ======================================================= -->
+<style>
+    /* Color Palette Variables */
+    :root {
+        --main-blue: #0077B6;
+        --sky-blue: #90E0EF;
+        --white: #FFFFFF;
+        --soft-gray: #E0E0E0;
+        --aqua-green: #00B4D8;
+        --dark-blue: #03045E;
+    }
+
+    body {
+        background-color: #f7f9fc;
+    }
+
+    /* Main Card */
+    .assign-card {
+        background-color: var(--white);
+        border: 1px solid var(--soft-gray);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(3, 4, 94, 0.1);
+        overflow: hidden;
+    }
+
+    /* Card Header */
+    .assign-card-header {
+        background-color: var(--dark-blue);
+        color: var(--white);
+        padding: 1.5rem;
+    }
+
+        .assign-card-header h4 {
+            color: var(--white);
+            font-weight: bold;
+        }
+
+    .card-body-custom {
+        padding: 2.5rem;
+    }
+
+    /* Info Section Headers */
+    .info-section-header {
+        color: var(--dark-blue);
+        border-bottom: 2px solid var(--sky-blue);
+    }
+
+    /* Info Lists */
+    .info-list .list-group-item {
+        border-color: var(--soft-gray);
+        background-color: transparent;
+    }
+
+        .info-list .list-group-item strong {
+            color: var(--dark-blue);
+        }
+
+    .info-list .price-highlight {
+        color: var(--main-blue);
+        font-weight: bold;
+    }
+
+    .info-list .icon-muted {
+        color: var(--main-blue);
+        opacity: 0.7;
+    }
+
+    /* Form Select */
+    .form-select-custom {
+        border-width: 2px;
+        border-color: var(--soft-gray);
+    }
+
+        .form-select-custom:focus {
+            border-color: var(--main-blue);
+            box-shadow: 0 0 0 0.25rem rgba(0, 119, 182, 0.2);
+        }
+
+    /* Buttons */
+    .btn-assign {
+        background-color: var(--aqua-green);
+        color: var(--white);
+        border: none;
+        padding: 12px 30px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-assign:hover {
+            background-color: var(--main-blue);
+        }
+
+    .btn-cancel {
+        background-color: var(--soft-gray);
+        color: #343a40;
+        border: none;
+        padding: 12px 30px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-cancel:hover {
+            background-color: #ced4da;
+        }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card assign-card">
+                <div class="card-header assign-card-header text-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-plus me-2"></i> تعيين سائق للطلب رقم #@Model.Id
+                    </h4>
+                </div>
+                <div class="card-body card-body-custom">
+
+                    <!-- Order & Customer Details -->
+                    <div class="row mb-4 g-4">
+                        <!-- Customer Info -->
+                        <div class="col-md-6">
+                            <h5 class="border-bottom pb-2 mb-3 info-section-header"><i class="fas fa-user-circle me-2"></i> معلومات الزبون</h5>
+                            <ul class="list-group list-group-flush info-list">
+                                <li class="list-group-item d-flex justify-content-between"><strong><i class="fas fa-user fa-fw me-2 icon-muted"></i> الاسم:</strong> <span>@Model.Customer.User.FullName</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><strong><i class="fas fa-phone-alt fa-fw me-2 icon-muted"></i> الهاتف:</strong> <span>@Model.Customer.User.PhoneNumber</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><strong><i class="fas fa-map-marker-alt fa-fw me-2 icon-muted"></i> المنطقة:</strong> <span>@Model.Customer.Region.Name</span></li>
+                                <li class="list-group-item"><strong><i class="fas fa-home fa-fw me-2 icon-muted"></i> العنوان:</strong> <p class="mb-0 mt-1 text-muted">@Model.Customer.User.Address</p></li>
+                            </ul>
+                        </div>
+
+                        <!-- Order Info -->
+                        <div class="col-md-6">
+                            <h5 class="border-bottom pb-2 mb-3 info-section-header"><i class="fas fa-receipt me-2"></i> تفاصيل الطلب</h5>
+                            <ul class="list-group list-group-flush info-list">
+                                <li class="list-group-item d-flex justify-content-between"><strong><i class="fas fa-tint fa-fw me-2 icon-muted"></i> الخزان:</strong> <span>@Model.Tank.Name</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><strong><i class="fas fa-box-open fa-fw me-2 icon-muted"></i> الكمية:</strong> <span>@Model.Quantity برميل</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><strong><i class="fas fa-dollar-sign fa-fw me-2 icon-muted"></i> السعر:</strong> <span class="price-highlight">@Model.Price.ToString("C")</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><strong><i class="fas fa-calendar-alt fa-fw me-2 icon-muted"></i> التاريخ:</strong> <span>@Model.OrderTime.ToString("yyyy/MM/dd, hh:mm tt")</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Driver Assignment Form -->
+                    <form asp-action="AssignDriver" method="post">
+                        <input type="hidden" name="orderId" value="@Model.Id" />
+
+                        <h5 class="mb-3"><i class="fas fa-id-card-alt me-2"></i> حدد السائق المسؤول</h5>
+                        <div class="form-floating mb-4">
+                            <select name="driverId" asp-items="ViewBag.Drivers" class="form-select form-select-lg form-select-custom" required>
+                                <option value="" disabled selected>-- اختر السائق المناسب من القائمة --</option>
+                            </select>
+                            <label for="driverId"><i class="fas fa-truck me-2"></i> السائق</label>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Action("ManageOrders")" class="btn btn-cancel">
+                                <i class="fas fa-times me-2"></i> إلغاء
+                            </a>
+                            <button type="submit" class="btn btn-assign">
+                                <i class="fas fa-check-circle me-2"></i> تعيين السائق
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

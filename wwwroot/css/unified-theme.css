@@ -1,0 +1,595 @@
+/* ملف CSS موحد لنظام سقيا لإدارة المياه */
+/* لوحة ألوان منقحة ومتناسقة - محدثة حسب المواصفات الجديدة */
+
+/* استيراد الخط العربي */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap');
+
+/* نظام الألوان الموحد والمنقح - محدث */
+:root {
+    /* الألوان الأساسية الجديدة */
+    --background-color: #F8F9FA;        /* الخلفية الأساسية - أبيض أو رمادي فاتح */
+    --primary-color: #0077B6;           /* اللون الأساسي - أزرق مائي نقي */
+    --secondary-color: #90E0EF;         /* اللون الثانوي - أزرق سماوي فاتح */
+    --accent-color: #00B4D8;            /* لون التمييز - تركواز */
+    --edit-button-color: #FFA500;       /* أزرار "تعديل" - برتقالي هادئ */
+    --details-button-color: #023E8A;    /* أزرار "تفاصيل" - أزرق داكن */
+    --text-dark: #343A40;               /* نصوص داكنة - أسود مائل للرمادي */
+    --delete-button-color: #DC3545;     /* أزرار "حذف" - أحمر واضح */
+    
+    /* خلفيات */
+    --bg-dark: #343A40;
+    --bg-light: #F8F9FA;
+    --card-bg: rgba(248, 249, 250, 0.95);
+    
+    /* نصوص */
+    --text-primary: #343A40;
+    --text-secondary: #6C757D;
+    --text-muted: #ADB5BD;
+    
+    /* تدرجات موحدة */
+    --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    --gradient-bg: linear-gradient(135deg, var(--bg-light) 0%, #E9ECEF 100%);
+    --gradient-border: linear-gradient(45deg, var(--primary-color), var(--accent-color), var(--edit-button-color));
+    
+    /* خلفيات شفافة للحالات */
+    --success-bg: rgba(40, 167, 69, 0.1);
+    --warning-bg: rgba(255, 165, 0, 0.1);
+    --info-bg: rgba(0, 180, 216, 0.1);
+    --danger-bg: rgba(220, 53, 69, 0.1);
+    
+    /* حقول الإدخال */
+    --input-bg: #FFFFFF;
+    --input-border: #DEE2E6;
+    
+    /* الظلال */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+    
+    /* المسافات */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    
+    /* الحدود */
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 24px;
+}
+
+/* إعدادات عامة */
+* {
+    font-family: 'Cairo', sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--background-color);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* تأثير الخلفية المتحركة - مبسط */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(0, 119, 182, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 180, 216, 0.05) 0%, transparent 50%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* البطاقات الموحدة */
+.unified-card {
+    background: #FFFFFF;
+    backdrop-filter: blur(20px);
+    border-radius: var(--border-radius-xl);
+    padding: var(--spacing-2xl);
+    position: relative;
+    box-shadow: var(--shadow-md);
+    border: 1px solid #E9ECEF;
+    transition: all 0.3s ease;
+}
+
+.unified-card::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: var(--gradient-border);
+    border-radius: calc(var(--border-radius-xl) + 2px);
+    z-index: -1;
+    opacity: 0.3;
+}
+
+.unified-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* العناوين الموحدة */
+.unified-title {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+}
+
+.unified-title.h1 { font-size: 2.5rem; }
+.unified-title.h2 { font-size: 2rem; }
+.unified-title.h3 { font-size: 1.75rem; }
+.unified-title.h4 { font-size: 1.5rem; }
+.unified-title.h5 { font-size: 1.25rem; }
+.unified-title.h6 { font-size: 1.1rem; }
+
+/* الأزرار الموحدة */
+.unified-btn {
+    border: none;
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    color: white;
+}
+
+.unified-btn:hover {
+    transform: translateY(-2px);
+    text-decoration: none;
+    color: white;
+}
+
+.unified-btn:active {
+    transform: translateY(0);
+}
+
+/* أنواع الأزرار - محدثة حسب المواصفات الجديدة */
+.unified-btn.primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.unified-btn.primary:hover {
+    background: #005A8B;
+    box-shadow: 0 10px 25px rgba(0, 119, 182, 0.3);
+}
+
+.unified-btn.edit {
+    background: var(--edit-button-color);
+    color: white;
+}
+
+.unified-btn.edit:hover {
+    background: #E6940A;
+    box-shadow: 0 10px 25px rgba(255, 165, 0, 0.3);
+}
+
+.unified-btn.details {
+    background: var(--details-button-color);
+    color: white;
+}
+
+.unified-btn.details:hover {
+    background: #012A5E;
+    box-shadow: 0 10px 25px rgba(2, 62, 138, 0.3);
+}
+
+.unified-btn.delete {
+    background: var(--delete-button-color);
+    color: white;
+}
+
+.unified-btn.delete:hover {
+    background: #C82333;
+    box-shadow: 0 10px 25px rgba(220, 53, 69, 0.3);
+}
+
+.unified-btn.success {
+    background: #28A745;
+    color: white;
+}
+
+.unified-btn.success:hover {
+    background: #218838;
+    box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+}
+
+.unified-btn.info {
+    background: var(--accent-color);
+    color: white;
+}
+
+.unified-btn.info:hover {
+    background: #0099CC;
+    box-shadow: 0 10px 25px rgba(0, 180, 216, 0.3);
+}
+
+/* أزرار صغيرة للجداول */
+.unified-btn.btn-sm {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.875rem;
+    border-radius: var(--border-radius-sm);
+}
+
+/* حقول الإدخال الموحدة */
+.unified-form-group {
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+}
+
+.unified-form-label {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-sm);
+    display: block;
+    font-weight: 500;
+}
+
+.unified-form-control {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: var(--border-radius-md);
+    color: var(--text-primary);
+    padding: var(--spacing-md);
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.unified-form-control:focus {
+    background: var(--input-bg);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.2);
+    color: var(--text-primary);
+    outline: none;
+}
+
+.unified-form-control::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* الجداول الموحدة */
+.unified-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #FFFFFF;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid #E9ECEF;
+}
+
+.unified-table th {
+    background: var(--primary-color);
+    color: white;
+    padding: var(--spacing-lg);
+    text-align: right;
+    font-weight: 600;
+}
+
+.unified-table td {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid #E9ECEF;
+    color: var(--text-primary);
+}
+
+.unified-table tr:hover {
+    background: rgba(0, 119, 182, 0.05);
+}
+
+/* عمود الإجراءات في الجداول */
+.actions-column {
+    width: 150px;
+    text-align: center;
+}
+
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    align-items: center;
+}
+
+/* الإحصائيات والبطاقات الصغيرة */
+.unified-stat-card {
+    background: #FFFFFF;
+    backdrop-filter: blur(20px);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+    position: relative;
+    box-shadow: var(--shadow-md);
+    border: 1px solid #E9ECEF;
+    transition: all 0.3s ease;
+}
+
+.unified-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+}
+
+.unified-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.unified-stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.unified-stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* الشريط الجانبي الموحد */
+.unified-sidebar {
+    background: #FFFFFF;
+    backdrop-filter: blur(20px);
+    border-radius: var(--border-radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    border: 1px solid #E9ECEF;
+}
+
+.unified-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-bottom: var(--spacing-sm);
+}
+
+.unified-sidebar-item:hover {
+    background: rgba(0, 119, 182, 0.1);
+    color: var(--primary-color);
+    transform: translateX(5px);
+    text-decoration: none;
+}
+
+.unified-sidebar-item.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.unified-sidebar-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* الرسائل والتنبيهات */
+.unified-alert {
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-lg);
+    border-left: 4px solid;
+}
+
+.unified-alert.success {
+    background: var(--success-bg);
+    border-color: #28A745;
+    color: #155724;
+}
+
+.unified-alert.warning {
+    background: var(--warning-bg);
+    border-color: var(--edit-button-color);
+    color: #856404;
+}
+
+.unified-alert.info {
+    background: var(--info-bg);
+    border-color: var(--accent-color);
+    color: #0C5460;
+}
+
+.unified-alert.danger {
+    background: var(--danger-bg);
+    border-color: var(--delete-button-color);
+    color: #721C24;
+}
+
+/* أيقونات ملونة موحدة - محدثة */
+.unified-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-md);
+    font-size: 1.2rem;
+}
+
+.unified-icon.primary { 
+    background: rgba(0, 119, 182, 0.1); 
+    color: var(--primary-color); 
+}
+
+.unified-icon.secondary { 
+    background: rgba(144, 224, 239, 0.3); 
+    color: var(--secondary-color); 
+}
+
+.unified-icon.accent { 
+    background: rgba(0, 180, 216, 0.1); 
+    color: var(--accent-color); 
+}
+
+.unified-icon.edit { 
+    background: rgba(255, 165, 0, 0.1); 
+    color: var(--edit-button-color); 
+}
+
+.unified-icon.details { 
+    background: rgba(2, 62, 138, 0.1); 
+    color: var(--details-button-color); 
+}
+
+.unified-icon.delete { 
+    background: rgba(220, 53, 69, 0.1); 
+    color: var(--delete-button-color); 
+}
+
+/* التصميم المتجاوب */
+@media (max-width: 768px) {
+    .unified-card {
+        padding: var(--spacing-xl);
+        margin: var(--spacing-md);
+    }
+    
+    .unified-title.h1 { font-size: 2rem; }
+    .unified-title.h2 { font-size: 1.75rem; }
+    .unified-title.h3 { font-size: 1.5rem; }
+    
+    .unified-btn {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: 0.9rem;
+    }
+    
+    .unified-stat-number {
+        font-size: 2rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+    
+    .actions-column {
+        width: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .unified-card {
+        padding: var(--spacing-lg);
+        margin: var(--spacing-sm);
+    }
+    
+    .unified-title.h1 { font-size: 1.75rem; }
+    .unified-title.h2 { font-size: 1.5rem; }
+    
+    .unified-stat-number {
+        font-size: 1.75rem;
+    }
+    
+    .unified-table th,
+    .unified-table td {
+        padding: var(--spacing-sm);
+        font-size: 0.875rem;
+    }
+}
+
+/* تأثيرات الحركة */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out;
+}
+
+/* تأثيرات التحميل */
+.unified-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 119, 182, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* أيقونات Font Awesome */
+.fa-eye {
+    font-size: 14px;
+}
+
+.fa-edit, .fa-pencil-alt {
+    font-size: 14px;
+}
+
+.fa-trash, .fa-trash-alt {
+    font-size: 14px;
+}
+
+/* تحسينات إضافية للأزرار */
+.unified-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.2);
+}
+
+.unified-btn.edit:focus {
+    box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
+}
+
+.unified-btn.details:focus {
+    box-shadow: 0 0 0 3px rgba(2, 62, 138, 0.2);
+}
+
+.unified-btn.delete:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+}
+

@@ -1,0 +1,427 @@
+@using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor
+@model LoginViewModel
+@{
+    ViewData["Title"] = "تسجيل الدخول";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - نظام سقيا لإدارة المياه</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* نظام الألوان الجديد المستوحى من التصميم المرجعي */
+        :root {
+        --primary-bg: #F8F9FA;
+        --card-bg: #FFFFFF;
+        --primary-color: #0077B6;
+        --secondary-color: #90E0EF;
+        --accent-color: #00B4D8;
+        --text-dark: #343A40;
+        --text-light: #FFFFFF;
+        --input-bg: #F8F9FA;
+        --input-border: #CED4DA;
+        --button-edit: #FFA500;
+        --button-details: #023E8A;
+        --button-delete: #DC3545;
+        }
+
+        * {
+        font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+        background-color: var(--primary-bg);
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        }
+
+        /* تأثير الخلفية المتحركة */
+        body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+        radial-gradient(circle at 20% 80%, rgba(0, 119, 182, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(144, 224, 239, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(0, 180, 216, 0.05) 0%, transparent 50%);
+        z-index: -1;
+        }
+
+        .main-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+        }
+
+        .login-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1200px;
+        width: 100%;
+        gap: 4rem;
+        }
+
+        /* قسم الترحيب والشعار */
+        .welcome-section {
+        flex: 1;
+        text-align: center;
+        color: var(--text-dark);
+        }
+
+        .logo-container {
+        background: var(--accent-color);
+        width: 120px;
+        height: 120px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        box-shadow: 0 20px 40px rgba(0, 180, 216, 0.3);
+        position: relative;
+        }
+
+        .logo-container::before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(45deg, var(--primary-color), var(--accent-color), var(--secondary-color));
+        border-radius: 26px;
+        z-index: -1;
+        }
+
+        .logo-container i {
+        font-size: 3.5rem;
+        color: white;
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+
+        .welcome-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--text-dark);
+        }
+
+        .welcome-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-dark);
+        line-height: 1.6;
+        margin-bottom: 0.5rem;
+        }
+
+        .welcome-description {
+        font-size: 0.95rem;
+        color: var(--text-dark);
+        opacity: 0.8;
+        font-style: italic;
+        }
+
+        /* بطاقة تسجيل الدخول */
+        .login-card {
+        background: var(--card-bg);
+        border-radius: 24px;
+        padding: 3rem;
+        width: 100%;
+        max-width: 420px;
+        position: relative;
+        box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .login-card::before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(45deg, var(--primary-color), var(--accent-color), var(--secondary-color));
+        border-radius: 26px;
+        z-index: -1;
+        opacity: 0.8;
+        }
+
+        .login-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        }
+
+        .login-title {
+        color: var(--text-dark);
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+        color: var(--text-dark);
+        font-size: 0.95rem;
+        }
+
+        /* حقول الإدخال */
+        .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+        }
+
+        .form-label {
+        color: var(--text-dark);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        display: block;
+        font-weight: 500;
+        }
+
+        .form-control {
+        background: var(--input-bg);
+        border: 1px solid var(--input-border);
+        border-radius: 12px;
+        color: var(--text-dark);
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+        background: var(--input-bg);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.2);
+        color: var(--text-dark);
+        outline: none;
+        }
+
+        .form-control::placeholder {
+        color: var(--text-dark);
+        opacity: 0.7;
+        }
+
+        /* خيارات إضافية */
+        .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        }
+
+        .form-check {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        }
+
+        .form-check-input {
+        background: var(--input-bg);
+        border: 1px solid var(--input-border);
+        border-radius: 4px;
+        }
+
+        .form-check-input:checked {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+        }
+
+        .form-check-label {
+        color: var(--text-dark);
+        font-size: 0.9rem;
+        cursor: pointer;
+        }
+
+        .forgot-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+        }
+
+        .forgot-link:hover {
+        color: var(--secondary-color);
+        }
+
+        /* زر تسجيل الدخول */
+        .btn-login {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        border: none;
+        border-radius: 12px;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        }
+
+        .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 119, 182, 0.4);
+        }
+
+        .btn-login:active {
+        transform: translateY(0);
+        }
+
+        /* رابط إنشاء حساب */
+        .register-section {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(52, 58, 64, 0.2);
+        }
+
+        .register-text {
+        color: var(--text-dark);
+        font-size: 0.95rem;
+        margin-bottom: 0;
+        }
+
+        .register-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+        }
+
+        .register-link:hover {
+        color: var(--secondary-color);
+        }
+
+        /* تصميم متجاوب */
+       
+        @@media (max-width: 768px) {
+        .login-wrapper {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .welcome-section {
+                order: 2;
+            }
+            
+            .login-card {
+                order: 1;
+                max-width: 100%;
+                padding: 2rem;
+            }
+            
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .logo-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .logo-container i {
+                font-size: 3rem;
+            }
+        }
+
+        /* رسائل التحقق */
+        .text-danger {
+            color: #DC3545 !important;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .alert-danger {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: #DC3545;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="login-wrapper">
+            <!-- قسم الترحيب والشعار -->
+            <div class="welcome-section">
+                <div class="logo-container">
+                    <i class="fas fa-tint"></i>
+                </div>
+                <h1 class="welcome-title">نظام سقيا لإدارة المياه</h1>
+                <p class="welcome-subtitle">
+                    مرحباً بك في نظام سقيا لإدارة توزيع المياه<br>
+                    نظام شامل لإدارة الزبائن والطلبيات والخزانات والمناطق<br>
+                    مع واجهة سهلة الاستخدام وميزات متقدمة
+                </p>
+                <p class="welcome-description">Welcome to SAQIYA WATER MANAGEMENT SYSTEM</p>
+            </div>
+
+            <!-- بطاقة تسجيل الدخول -->
+            <div class="login-card">
+                <div class="login-header">
+                    <h2 class="login-title">تسجيل الدخول</h2>
+                    <p class="login-subtitle">أدخل بياناتك للوصول إلى النظام</p>
+                </div>
+
+                <form asp-action="Login" method="post" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <!-- اسم المستخدم -->
+                    <div class="form-group">
+                        <label asp-for="Email" class="form-label">اسم المستخدم</label>
+                        <input asp-for="Email" class="form-control" placeholder="admin" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <!-- كلمة المرور -->
+                    <div class="form-group">
+                        <label asp-for="Password" class="form-label">كلمة المرور</label>
+                        <input asp-for="Password" class="form-control" placeholder="••••••" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <!-- خيارات إضافية -->
+                    <div class="form-options">
+                        <div class="form-check">
+                            <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
+                            <label asp-for="RememberMe" class="form-check-label">تذكرني</label>
+                        </div>
+                        <a href="#" class="forgot-link">نسيت كلمة المرور؟</a>
+                    </div>
+
+                    <!-- زر تسجيل الدخول -->
+                    <button type="submit" class="btn btn-login">
+                        تسجيل الدخول
+                    </button>
+
+                    <!-- رابط إنشاء حساب -->
+                    <div class="register-section">
+                        <p class="register-text">
+                            ليس لديك حساب؟ <a asp-action="Register" class="register-link">أنشئ حساباً جديداً</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+</body>
+</html>

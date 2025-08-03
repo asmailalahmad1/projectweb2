@@ -1,0 +1,145 @@
+@model Region
+@{
+    ViewData["Title"] = "إضافة منطقة جديدة";
+    Layout = "_Layout";
+}
+
+<!-- ======================================================= -->
+<!-- ==========         Create Region Form Styles   ========== -->
+<!-- ======================================================= -->
+<style>
+    /* Color Palette Variables */
+    :root {
+        --main-blue: #0077B6;
+        --sky-blue: #90E0EF;
+        --white: #FFFFFF;
+        --soft-gray: #E0E0E0;
+        --aqua-green: #00B4D8;
+        --dark-blue: #03045E;
+    }
+
+    body {
+        background-color: #f7f9fc; /* Light background to make the card stand out */
+    }
+
+    /* Main Form Card */
+    .form-card-custom {
+        background-color: var(--white);
+        border: 1px solid var(--soft-gray);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(3, 4, 94, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+        .form-card-custom:hover {
+            transform: translateY(-5px);
+        }
+
+    /* Card Header */
+    .form-header-custom {
+        background-color: var(--dark-blue);
+        color: var(--white);
+        padding: 1.5rem;
+    }
+
+        .form-header-custom h3 {
+            color: var(--white);
+            font-weight: bold;
+        }
+
+    .card-body-custom {
+        padding: 2rem;
+    }
+
+    /* Floating Labels & Inputs */
+    .form-floating > .form-control {
+        border-width: 2px;
+        border-color: var(--soft-gray);
+        transition: border-color .15s ease-in-out;
+    }
+
+        .form-floating > .form-control:focus {
+            border-color: var(--main-blue);
+            box-shadow: none;
+        }
+
+    .form-floating > label {
+        color: #6c757d;
+    }
+
+    .form-floating > .form-control:focus ~ label {
+        color: var(--main-blue);
+    }
+
+    /* Buttons */
+    .btn-save-custom {
+        background-color: var(--aqua-green);
+        color: var(--white);
+        border: none;
+        padding: 12px 30px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-save-custom:hover {
+            background-color: var(--main-blue);
+        }
+
+    .btn-cancel-custom {
+        background-color: var(--soft-gray);
+        color: #343a40;
+        border: none;
+        padding: 12px 30px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-cancel-custom:hover {
+            background-color: #ced4da;
+        }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card form-card-custom">
+                <div class="card-header form-header-custom text-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-map-marked-alt me-2"></i> إضافة منطقة جديدة
+                    </h3>
+                </div>
+                <div class="card-body card-body-custom">
+                    <form asp-action="CreateRegion" method="post" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+
+                        <!-- Region Name with Floating Label -->
+                        <div class="form-floating mb-4">
+                            <input asp-for="Name" class="form-control" placeholder="اسم المنطقة" />
+                            <label asp-for="Name"><i class="fas fa-globe-asia me-2"></i> اسم المنطقة</label>
+                            <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Action("ManageRegions")" class="btn btn-cancel-custom">
+                                <i class="fas fa-arrow-left me-2"></i> العودة
+                            </a>
+                            <button type="submit" class="btn btn-save-custom">
+                                <i class="fas fa-save me-2"></i> حفظ المنطقة
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

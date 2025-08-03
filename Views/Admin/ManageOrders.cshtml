@@ -1,0 +1,259 @@
+@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "إدارة الطلبات";
+}
+
+<!-- ======================================================= -->
+<!-- ==========        Order Management Styles      ========== -->
+<!-- ======================================================= -->
+<style>
+    :root {
+        --main-blue: #0077B6;
+        --sky-blue: #90E0EF;
+        --white: #FFFFFF;
+        --soft-gray: #E0E0E0;
+        --aqua-green: #00B4D8;
+        --dark-blue: #03045E;
+        --table-stripe: #f7f9fc;
+        /* Semantic Colors */
+        --success-green: #28a745;
+        --danger-red: #d9534f;
+        --warning-orange: #ffc107;
+        --info-cyan: #17a2b8;
+        --primary-purple: #6b46c1;
+        --secondary-gray: #6c757d;
+    }
+
+    .page-title {
+        color: var(--dark-blue);
+        border-bottom: 2px solid var(--sky-blue);
+        padding-bottom: 10px;
+        margin-bottom: 2rem;
+    }
+
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table-custom thead tr {
+            background-color: var(--dark-blue);
+            color: var(--white);
+            text-align: right;
+        }
+
+        .table-custom th, .table-custom td {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+
+        .table-custom tbody tr {
+            border-bottom: 1px solid var(--soft-gray);
+            background-color: var(--white);
+        }
+
+            .table-custom tbody tr:nth-of-type(even) {
+                background-color: var(--table-stripe);
+            }
+
+            .table-custom tbody tr.row-Pending {
+                background-color: #fffbeb;
+                border-left: 4px solid var(--warning-orange);
+            }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--white);
+        min-width: 80px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    .status-Pending {
+        background-color: var(--warning-orange);
+    }
+
+    .status-Accepted {
+        background-color: var(--info-cyan);
+    }
+
+    .status-InDelivery {
+        background-color: var(--primary-purple);
+    }
+
+    .status-Delivered {
+        background-color: var(--success-green);
+    }
+
+    .status-Rejected {
+        background-color: var(--danger-red);
+    }
+
+    .status-Cancelled {
+        background-color: var(--secondary-gray);
+    }
+
+    .action-buttons .btn, .action-buttons form {
+        margin: 0 2px;
+    }
+
+    .rating-display {
+        color: var(--warning-orange);
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="page-title"><i class="fas fa-tasks me-2"></i> إدارة الطلبات</h2>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive mt-4">
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th>رقم الطلب</th>
+                        <th>الزبون</th>
+                        <th>الخزان</th>
+                        <th>الكمية</th>
+                        <th>السعر</th>
+                        <th>تاريخ الطلب</th>
+                        <th>الحالة</th>
+                        <th>السائق</th>
+                        <th class="text-center">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr class="row-@order.Status">
+                            <td><strong>#@order.Id</strong></td>
+                            <td>
+                                @(order.Customer?.User?.FullName ?? "زبون محذوف")
+                                @if (order.Customer?.User != null)
+                                {
+                                    <br />
+                                    <small class="text-muted">@order.Customer.User.PhoneNumber</small>
+                                }
+                            </td>
+                            <td>@(order.Tank?.Name ?? "خزان محذوف")</td>
+                            <td>@order.Quantity برميل</td>
+                            <td>@order.Price.ToString("C", new System.Globalization.CultureInfo("ar-SA"))</td>
+                            <td>@order.OrderTime.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                <span class="status-badge status-@order.Status">
+                                    @* === بداية الكود المصحح لـ switch === *@
+                                    @switch (order.Status)
+                                    {
+                                        case "Pending":
+                                            <text>معلق</text>
+                                            break;
+                                        case "Accepted":
+                                            <text>مقبول</text>
+                                            break;
+                                        case "InDelivery":
+                                            <text>قيد التوصيل</text>
+                                            break;
+                                        case "Delivered":
+                                            <text>تم التسليم</text>
+                                            break;
+                                        case "Rejected":
+                                            <text>مرفوض</text>
+                                            break;
+                                        case "Cancelled":
+                                            <text>ملغى</text>
+                                            break;
+                                        default:
+                                            <text>@order.Status</text>
+                                            break;
+                                    }
+                                    @* === نهاية الكود المصحح === *@
+                                </span>
+                            </td>
+                            <td>
+                                @if (order.Driver != null)
+                                {
+                                    @(order.Driver.User?.FullName ?? "سائق محذوف")
+                                }
+                                else
+                                {
+                                    <span class="text-muted">لم يتم التعيين</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <div class="action-buttons d-inline-flex align-items-center flex-wrap">
+                                    <!-- زر التفاصيل (دائمًا موجود) -->
+                                    <a href="@Url.Action("OrderDetails", new { id = order.Id })" class="btn btn-info btn-sm" title="عرض التفاصيل">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+
+                                    <!-- زر الحذف الصحيح (دائمًا موجود) -->
+                                    <form asp-action="DeleteOrder" asp-route-id="@order.Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-danger btn-sm" title="حذف الطلب"
+                                                onclick="return confirm('هل أنت متأكد من حذف هذا الطلب بشكل نهائي؟');">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+
+                                    <!-- الإجراءات المعتمدة على حالة الطلب -->
+                                    @if (order.Status == "Pending")
+                                    {
+                                        <!-- قبول الطلب -->
+                                        <form asp-action="AcceptOrder" method="post" class="d-inline">
+                                            <input type="hidden" name="orderId" value="@order.Id" />
+                                            <button type="submit" class="btn btn-sm btn-success" title="قبول الطلب">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </form>
+                                        <!-- رفض الطلب -->
+                                        <form asp-action="RejectOrder" method="post" class="d-inline">
+                                            <input type="hidden" name="orderId" value="@order.Id" />
+                                            <button type="submit" class="btn btn-sm btn-warning" title="رفض الطلب"
+                                                    onclick="return confirm('هل أنت متأكد من رفض هذا الطلب؟')">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (order.Status == "Accepted" && order.Driver == null)
+                                    {
+                                        <!-- تعيين سائق -->
+                                        <a href="@Url.Action("AssignDriver", new { orderId = order.Id })"
+                                           class="btn btn-sm btn-primary" title="تعيين سائق">
+                                            <i class="fas fa-user-plus"></i>
+                                        </a>
+                                    }
+                                    else if (order.Status == "Delivered" && order.Rating.HasValue)
+                                    {
+                                        <!-- عرض التقييم -->
+                                        <span class="rating-display ms-2" title="تقييم الزبون">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="fas fa-star @(i <= order.Rating ? "" : "text-muted")"></i>
+                                            }
+                                        </span>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-custom-info mt-4 p-4 text-center">
+            <h5><i class="fas fa-info-circle me-2"></i> لا توجد طلبات حتى الآن.</h5>
+        </div>
+    }
+</div>

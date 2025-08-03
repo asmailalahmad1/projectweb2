@@ -1,0 +1,208 @@
+@model Order
+@{
+    ViewData["Title"] = "تفاصيل الطلب";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="unified-title h3">
+                        <i class="fas fa-receipt"></i> تفاصيل الطلب رقم: @Model.Id
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="unified-title h5">معلومات الطلب</h5>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">رقم الطلب:</label>
+                                <p class="form-control-plaintext"><strong>@Model.Id</strong></p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">تاريخ الطلب:</label>
+                                <p class="form-control-plaintext">@Model.OrderTime.ToString("dd/MM/yyyy HH:mm")</p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">الحالة:</label>
+                                <p class="form-control-plaintext">
+                                    <span class="badge @(
+                                        Model.Status == "New" ? "bg-warning" :
+                                        Model.Status == "Accepted" ? "bg-primary" :
+                                        Model.Status == "InDelivery" ? "bg-info" :
+                                        Model.Status == "Delivered" ? "bg-success" :
+                                        Model.Status == "Rejected" ? "bg-danger" :
+                                        Model.Status == "Cancelled" ? "bg-secondary" : "bg-secondary")">
+                                        @(Model.Status == "New" ? "جديد" :
+                                          Model.Status == "Accepted" ? "مقبول" :
+                                          Model.Status == "InDelivery" ? "قيد التوصيل" :
+                                          Model.Status == "Delivered" ? "تم التسليم" :
+                                          Model.Status == "Rejected" ? "مرفوض" :
+                                          Model.Status == "Cancelled" ? "ملغى" : Model.Status)
+                                    </span>
+                                </p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">الخزان:</label>
+                                <p class="form-control-plaintext">@Model.Tank.Name</p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">نوع المياه:</label>
+                                <p class="form-control-plaintext">@Model.Tank.WaterType</p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">الكمية:</label>
+                                <p class="form-control-plaintext">@Model.Quantity برميل</p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">السعر الإجمالي:</label>
+                                <p class="form-control-plaintext"><strong>@Model.Price.ToString("C")</strong></p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5 class="unified-title h5">معلومات العميل</h5>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">اسم العميل:</label>
+                                <p class="form-control-plaintext">
+                                    <a href="/Admin/CustomerDetails/@Model.Customer.Id" class="text-primary">
+                                        @Model.Customer.User.FullName
+                                    </a>
+                                </p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">رقم الهاتف:</label>
+                                <p class="form-control-plaintext">
+                                    <a href="tel:@Model.Customer.User.PhoneNumber" class="text-primary">
+                                        <i class="fas fa-phone"></i> @Model.Customer.User.PhoneNumber
+                                    </a>
+                                </p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">العنوان:</label>
+                                <p class="form-control-plaintext">@Model.Customer.User.Address</p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">المنطقة:</label>
+                                <p class="form-control-plaintext">@Model.Customer.Region.Name</p>
+                            </div>
+                            
+                            @if (Model.Driver != null)
+                            {
+                                <h5 class="unified-title h5 mt-4">معلومات السائق</h5>
+                                
+                                <div class="unified-form-group">
+                                    <label class="unified-form-label">اسم السائق:</label>
+                                    <p class="form-control-plaintext">
+                                        <a href="/Admin/DriverDetails/@Model.Driver.Id" class="text-primary">
+                                            @Model.Driver.User.FullName
+                                        </a>
+                                    </p>
+                                </div>
+                                
+                                <div class="unified-form-group">
+                                    <label class="unified-form-label">رقم هاتف السائق:</label>
+                                    <p class="form-control-plaintext">
+                                        <a href="tel:@Model.Driver.User.PhoneNumber" class="text-primary">
+                                            <i class="fas fa-phone"></i> @Model.Driver.User.PhoneNumber
+                                        </a>
+                                    </p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="unified-alert warning mt-4">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    لم يتم تعيين سائق لهذا الطلب بعد.
+                                    @if (Model.Status == "Accepted")
+                                    {
+                                        <br />
+                                        <a href="/Admin/AssignDriver?orderId=@Model.Id" class="btn btn-primary btn-sm mt-2">
+                                            <i class="fas fa-user-plus"></i> تعيين سائق
+                                        </a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    
+                    @if (Model.Status == "Delivered" && (Model.Rating.HasValue || !string.IsNullOrEmpty(Model.Comment)))
+                    {
+                        <hr />
+                        <h5 class="unified-title h5">تقييم العميل</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                @if (Model.Rating.HasValue)
+                                {
+                                    <div class="unified-form-group">
+                                        <label class="unified-form-label">التقييم:</label>
+                                        <p class="form-control-plaintext">
+                                            <span class="text-warning">
+                                                @for (int i = 1; i <= Model.Rating; i++)
+                                                {
+                                                    <i class="fas fa-star"></i>
+                                                }
+                                                (@Model.Rating من 5)
+                                            </span>
+                                        </p>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                @if (!string.IsNullOrEmpty(Model.Comment))
+                                {
+                                    <div class="unified-form-group">
+                                        <label class="unified-form-label">تعليق العميل:</label>
+                                        <p class="form-control-plaintext">
+                                            <em>"@Model.Comment"</em>
+                                        </p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    @if (Model.Status == "New")
+                    {
+                        <form asp-action="AcceptOrder" method="post" class="d-inline">
+                            <input type="hidden" name="orderId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check"></i> قبول الطلب
+                            </button>
+                        </form>
+                        <form asp-action="RejectOrder" method="post" class="d-inline">
+                            <input type="hidden" name="orderId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-delete" onclick="return confirm('هل أنت متأكد من رفض الطلب؟')">
+                                <i class="fas fa-times"></i> رفض الطلب
+                            </button>
+                        </form>
+                    }
+                    else if (Model.Status == "Accepted" && Model.Driver == null)
+                    {
+                        <a href="/Admin/AssignDriver?orderId=@Model.Id" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> تعيين سائق
+                        </a>
+                    }
+                    
+                    <a href="/Admin/ManageOrders" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i> العودة للقائمة
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

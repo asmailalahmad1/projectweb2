@@ -1,0 +1,40 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/SuqiaWaterDistribution/css/site.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-jVi2NQ4d535M9/Tb0vReSwO/Hs0XIFRBF0uc47UD7As="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"3698"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022jVi2NQ4d535M9/Tb0vReSwO/Hs0XIFRBF0uc47UD7As=\u0022"},{"Name":"Last-Modified","Value":"Fri, 01 Aug 2025 12:31:36 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/SuqiaWaterDistribution/css/site.phdx21ffpo.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"phdx21ffpo"},{"Name":"integrity","Value":"sha256-jVi2NQ4d535M9/Tb0vReSwO/Hs0XIFRBF0uc47UD7As="},{"Name":"label","Value":"_content/SuqiaWaterDistribution/css/site.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"3698"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022jVi2NQ4d535M9/Tb0vReSwO/Hs0XIFRBF0uc47UD7As=\u0022"},{"Name":"Last-Modified","Value":"Fri, 01 Aug 2025 12:31:36 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/SuqiaWaterDistribution/css/unified-theme.5g528gsqxp.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\unified-theme.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"5g528gsqxp"},{"Name":"integrity","Value":"sha256-FRBWhVFCX9YrAzJJpFPyEjlhQejdPCj/jZw2GKceFQw="},{"Name":"label","Value":"_content/SuqiaWaterDistribution/css/unified-theme.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"11425"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022FRBWhVFCX9YrAzJJpFPyEjlhQejdPCj/jZw2GKceFQw=\u0022"},{"Name":"Last-Modified","Value":"Fri, 01 Aug 2025 12:31:36 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/SuqiaWaterDistribution/css/unified-theme.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\unified-theme.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-FRBWhVFCX9YrAzJJpFPyEjlhQejdPCj/jZw2GKceFQw="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"11425"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022FRBWhVFCX9YrAzJJpFPyEjlhQejdPCj/jZw2GKceFQw=\u0022"},{"Name":"Last-Modified","Value":"Fri, 01 Aug 2025 12:31:36 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/SuqiaWaterDistribution/js/site.73xer3n9bl.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\site.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"73xer3n9bl"},{"Name":"integrity","Value":"sha256-/ck35SBJOHT4mml8Hso2TnvtMasRGNrc3kUIYzDT1Fs="},{"Name":"label","Value":"_content/SuqiaWaterDistribution/js/site.js"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"3342"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022/ck35SBJOHT4mml8Hso2TnvtMasRGNrc3kUIYzDT1Fs=\u0022"},{"Name":"Last-Modified","Value":"Fri, 01 Aug 2025 12:31:36 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/SuqiaWaterDistribution/js/site.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\site.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-/ck35SBJOHT4mml8Hso2TnvtMasRGNrc3kUIYzDT1Fs="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"3342"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022/ck35SBJOHT4mml8Hso2TnvtMasRGNrc3kUIYzDT1Fs=\u0022"},{"Name":"Last-Modified","Value":"Fri, 01 Aug 2025 12:31:36 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>

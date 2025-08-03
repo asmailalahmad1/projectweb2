@@ -1,0 +1,243 @@
+@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "الطلبات المعينة";
+}
+
+<!-- ======================================================= -->
+<!-- ==========       Assigned Orders Styles        ========== -->
+<!-- ======================================================= -->
+<style>
+    /* Color Palette Variables */
+    :root {
+        --main-blue: #0077B6; /* أزرق ماء رئيسي */
+        --sky-blue: #90E0EF; /* أزرق سماوي */
+        --white: #FFFFFF; /* أبيض نقي */
+        --soft-gray: #E0E0E0; /* رمادي ناعم */
+        --aqua-green: #00B4D8; /* أخضر مائي */
+        --dark-blue: #03045E; /* أزرق داكن جدًا */
+    }
+
+    /* Page Title */
+    .page-title {
+        color: var(--dark-blue);
+        border-bottom: 2px solid var(--sky-blue);
+        padding-bottom: 10px;
+    }
+
+    /* Custom Table Design */
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        overflow: hidden; /* Important for border-radius on table */
+    }
+
+        .table-custom thead tr {
+            background-color: var(--main-blue); /* Main Blue for Header */
+            color: var(--white);
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .table-custom th, .table-custom td {
+            padding: 12px 15px;
+        }
+
+        .table-custom tbody tr {
+            border-bottom: 1px solid var(--soft-gray);
+        }
+
+            .table-custom tbody tr:nth-of-type(even) {
+                background-color: #f8f9fa; /* A very light gray for striping */
+            }
+
+            .table-custom tbody tr:last-of-type {
+                border-bottom: none;
+            }
+
+        /* Row highlighting for active orders */
+        .table-custom .row-in-delivery {
+            background-color: var(--sky-blue) !important;
+            font-weight: 500;
+        }
+
+            .table-custom .row-in-delivery td {
+                color: var(--dark-blue);
+            }
+
+
+    /* Status Badges */
+    .status-badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: var(--white);
+    }
+
+    .status-accepted {
+        background-color: #6c757d;
+    }
+    /* Neutral Gray */
+    .status-in-delivery {
+        background-color: var(--main-blue);
+    }
+
+    .status-delivered {
+        background-color: var(--aqua-green);
+    }
+
+    /* Action Buttons */
+    .btn-action {
+        background-color: var(--aqua-green);
+        color: var(--white);
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-action:hover {
+            background-color: var(--main-blue);
+            color: var(--white);
+        }
+
+    /* Phone link styling */
+    .phone-link {
+        color: var(--main-blue);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+        .phone-link:hover {
+            text-decoration: underline;
+        }
+
+    /* Completed status text */
+    .status-complete-text {
+        color: var(--aqua-green);
+        font-weight: bold;
+    }
+
+    /* Rating Stars */
+    .rating-stars {
+        color: var(--main-blue);
+    }
+
+    /* Custom Alert for no orders */
+    .alert-custom-info {
+        background-color: var(--sky-blue);
+        color: var(--dark-blue);
+        border: 1px solid var(--aqua-green);
+        border-radius: 8px;
+        padding: 15px;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="page-title"><i class="fas fa-truck-loading"></i> الطلبات المعينة لي</h2>
+    </div>
+</div>
+
+@if (Model.Any())
+{
+    <div class="table-responsive mt-4">
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>رقم الطلب</th>
+                    <th>الزبون</th>
+                    <th>رقم الهاتف</th>
+                    <th>العنوان</th>
+                    <th>الخزان</th>
+                    <th>الكمية</th>
+                    <th>تاريخ الطلب</th>
+                    <th>الحالة</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr class="@(order.Status == "InDelivery" ? "row-in-delivery" : "")">
+                        <td><strong>@order.Id</strong></td>
+                        <td>@order.Customer.User.FullName</td>
+                        <td>
+                            <a href="tel:@order.Customer.User.PhoneNumber" class="phone-link">
+                                <i class="fas fa-phone-alt"></i> @order.Customer.User.PhoneNumber
+                            </a>
+                        </td>
+                        <td>@order.Customer.User.Address</td>
+                        <td>@order.Tank.Name</td>
+                        <td>@order.Quantity برميل</td>
+                        <td>@order.OrderTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @if (order.Status == "Accepted")
+                            {
+                                <span class="status-badge status-accepted">مقبول</span>
+                            }
+                            else if (order.Status == "InDelivery")
+                            {
+                                <span class="status-badge status-in-delivery">قيد التوصيل</span>
+                            }
+                            else if (order.Status == "Delivered")
+                            {
+                                <span class="status-badge status-delivered">تم التسليم</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="/Driver/OrderDetails/@order.Id" class="btn btn-details btn-sm" title="عرض التفاصيل">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                @if (order.Status == "Accepted")
+                                {
+                                    <form asp-action="StartDelivery" method="post" style="display: inline;">
+                                        <input type="hidden" name="orderId" value="@order.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success" title="بدء التوصيل">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                    </form>
+                                }
+                                else if (order.Status == "InDelivery")
+                                {
+                                    <form asp-action="CompleteDelivery" method="post" style="display: inline;">
+                                        <input type="hidden" name="orderId" value="@order.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success" title="تم التسليم"
+                                                onclick="return confirm('هل تم تسليم الطلب بنجاح؟')">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </form>
+                                }
+                                else if (order.Status == "Delivered")
+                                {
+                                    <span class="status-complete-text">
+                                        <i class="fas fa-check-circle"></i> مكتمل
+                                    </span>
+                                    @if (order.Rating != null)
+                                    {
+                                        <br />
+                                        <small class="rating-stars">
+                                            @for (int i = 1; i <= order.Rating; i++)
+                                            {
+                                                <i class="fas fa-star"></i>
+                                            }
+                                        </small>
+                                    }
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-custom-info mt-4">
+        <i class="fas fa-info-circle"></i> لا توجد طلبات معينة لك حالياً.
+    </div>
+}

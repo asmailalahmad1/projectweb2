@@ -1,0 +1,186 @@
+@{
+    ViewData["Title"] = "الصفحة الرئيسية";
+}
+
+<!-- ======================================================= -->
+<!-- ==========   Styles based on the color palette   ========== -->
+<!-- ======================================================= -->
+<style>
+    /* Color Palette Variables */
+    :root {
+        --main-blue: #0077B6; /* أزرق ماء رئيسي */
+        --sky-blue: #90E0EF; /* أزرق سماوي */
+        --white: #FFFFFF; /* أبيض نقي */
+        --soft-gray: #E0E0E0; /* رمادي ناعم */
+        --aqua-green: #00B4D8; /* أخضر مائي */
+        --dark-blue: #03045E; /* أزرق داكن جدًا */
+    }
+
+    /* General Body & Text */
+    body {
+        background-color: var(--white);
+    }
+
+    .text-center h1, .text-center h3, .text-center h5 {
+        color: var(--dark-blue); /* Titles Color */
+    }
+
+    p {
+        color: #495057; /* Softer text color for paragraphs */
+    }
+
+    /* Hero Section (Jumbotron) */
+    .hero-section {
+        background-color: var(--main-blue);
+        color: var(--white);
+        border-radius: 0.75rem;
+    }
+
+        .hero-section h1, .hero-section p {
+            color: var(--white);
+        }
+
+        .hero-section hr {
+            border-top-color: rgba(255, 255, 255, 0.5);
+        }
+
+    /* Buttons */
+    .btn-register {
+        background-color: var(--aqua-green);
+        color: var(--white);
+        border: 2px solid var(--aqua-green);
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+        .btn-register:hover {
+            background-color: var(--main-blue);
+            border-color: var(--main-blue);
+            color: var(--white);
+        }
+
+    .hero-section .btn-outline-light:hover {
+        background-color: var(--white);
+        color: var(--main-blue);
+    }
+
+    /* Feature Cards */
+    .feature-card {
+        border: 1px solid var(--soft-gray);
+        background-color: var(--white);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border-radius: 0.5rem;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(3, 4, 94, 0.1);
+        }
+
+        .feature-card .card-title {
+            color: var(--dark-blue);
+            font-weight: bold;
+        }
+
+        .feature-card .feature-icon {
+            color: var(--aqua-green); /* Special icon color */
+        }
+
+    /* "How it works" Section */
+    .step-number {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: var(--main-blue);
+        color: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0 auto 15px;
+        border: 3px solid var(--sky-blue);
+    }
+</style>
+
+
+<div class="text-center">
+    <!-- Hero Section with new custom class -->
+    <div class="hero-section p-5 rounded mb-4">
+        <h1 class="display-4">
+            <i class="fas fa-tint"></i> مرحباً بكم في سقيا
+        </h1>
+        <p class="lead">نظام إدارة توزيع المياه في ريف إدلب الجنوبي</p>
+        <hr class="my-4">
+        <p>نظام رقمي متطور لتحسين وتنسيق عملية توزيع المياه في المناطق الريفية والمجتمعات المتضررة</p>
+        @if (!User.Identity!.IsAuthenticated)
+        {
+            <!-- Buttons with new custom classes -->
+            <a class="btn btn-register btn-lg me-3" asp-controller="Account" asp-action="Register" role="button">
+                <i class="fas fa-user-plus"></i> التسجيل الآن
+            </a>
+            <a class="btn btn-outline-light btn-lg" asp-controller="Account" asp-action="Login" role="button">
+                <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+            </a>
+        }
+    </div>
+
+    <!-- Feature cards with new classes -->
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-balance-scale fa-3x feature-icon mb-3"></i>
+                    <h5 class="card-title">عدالة التوزيع</h5>
+                    <p class="card-text">ربط الخزانات بالمناطق الجغرافية وتحديد كفاءة الخدمة لضمان التوزيع العادل</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-mobile-alt fa-3x feature-icon mb-3"></i>
+                    <h5 class="card-title">سهولة الوصول</h5>
+                    <p class="card-text">يمكن للمستخدمين من أي منطقة تقديم الطلبات بسهولة عبر النظام الرقمي</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-3x feature-icon mb-3"></i>
+                    <h5 class="card-title">إحصائيات آنية</h5>
+                    <p class="card-text">تقارير وإحصائيات تعطي صورة واضحة عن أداء النظام والمناطق الأكثر احتياجاً</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- "How it works" section with updated styles -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h3>كيف يعمل النظام؟</h3>
+            <div class="row mt-4">
+                <div class="col-md-3 text-center">
+                    <div class="step-number">1</div>
+                    <h5>التسجيل</h5>
+                    <p>سجل في النظام واختر منطقتك</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="step-number">2</div>
+                    <h5>اختيار الخزان</h5>
+                    <p>اختر من الخزانات المتوفرة في منطقتك</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="step-number">3</div>
+                    <h5>تقديم الطلب</h5>
+                    <p>حدد الكمية المطلوبة وأرسل الطلب</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="step-number">4</div>
+                    <h5>التوصيل</h5>
+                    <p>تتبع حالة طلبك حتى التسليم</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

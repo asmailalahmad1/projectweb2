@@ -1,0 +1,161 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+
+@model Order
+@{
+    ViewData["Title"] = "تفاصيل الطلب";
+}
+
+<style>
+    /* يمكنك إضافة أي تنسيقات مخصصة هنا */
+    .card-header { background-color: #f7f9fc; }
+    .unified-title { color: #03045E; }
+    .unified-form-label { font-weight: 500; color: #6c757d; }
+    .form-control-plaintext { color: #333; }
+</style>
+
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h3 class="unified-title h4 mb-0">
+                        <i class="fas fa-receipt me-2"></i> تفاصيل الطلب رقم: @Model.Id
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <!-- ===================== معلومات الطلب ===================== -->
+                        <div class="col-md-6 mb-4">
+                            <h5 class="unified-title h5 border-bottom pb-2 mb-3">معلومات الطلب</h5>
+                            
+                            <dl class="row">
+                                <dt class="col-sm-5 unified-form-label">تاريخ الطلب:</dt>
+                                <dd class="col-sm-7 form-control-plaintext">@Model.OrderTime.ToString("dd/MM/yyyy, hh:mm tt")</dd>
+
+                                <dt class="col-sm-5 unified-form-label">الحالة:</dt>
+                                <dd class="col-sm-7 form-control-plaintext">
+                                    <span class="badge fs-6 status-badge status-@Model.Status">
+                                        @switch (Model.Status)
+                                        {
+                                            case "Pending": <text>معلق</text>; break;
+                                            case "Accepted": <text>مقبول</text>; break;
+                                            case "InDelivery": <text>قيد التوصيل</text>; break;
+                                            case "Delivered": <text>تم التسليم</text>; break;
+                                            case "Rejected": <text>مرفوض</text>; break;
+                                            default: <text>ملغى</text>; break;
+                                        }
+                                    </span>
+                                </dd>
+
+                                <dt class="col-sm-5 unified-form-label">الخزان:</dt>
+                                <dd class="col-sm-7 form-control-plaintext">@(Model.Tank?.Name ?? "غير متوفر")</dd>
+
+                                <dt class="col-sm-5 unified-form-label">نوع المياه:</dt>
+                                <dd class="col-sm-7 form-control-plaintext">@(Model.Tank?.WaterType ?? "غير متوفر")</dd>
+
+                                <dt class="col-sm-5 unified-form-label">الكمية:</dt>
+                                <dd class="col-sm-7 form-control-plaintext">@Model.Quantity برميل</dd>
+
+                                <dt class="col-sm-5 unified-form-label">السعر الإجمالي:</dt>
+                                <dd class="col-sm-7 form-control-plaintext"><strong class="text-success">@Model.Price.ToString("C", new System.Globalization.CultureInfo("ar-SA"))</strong></dd>
+                            </dl>
+                        </div>
+                        
+                        <!-- ===================== معلومات التوصيل والعميل ===================== -->
+                        <div class="col-md-6 mb-4">
+                            <h5 class="unified-title h5 border-bottom pb-2 mb-3">معلومات التوصيل</h5>
+                            <dl class="row">
+                                <dt class="col-sm-5 unified-form-label">اسم العميل:</dt>
+                                <dd class="col-sm-7 form-control-plaintext">@(Model.Customer?.User?.FullName ?? "غير متوفر")</dd>
+                                
+                                <dt class="col-sm-5 unified-form-label">العنوان:</dt>
+                                <dd class="col-sm-7 form-control-plaintext">@(Model.Customer?.User?.Address ?? "غير متوفر")</dd>
+                                
+                                <dt class="col-sm-5 unified-form-label">المنطقة:</dt>
+                                <dd class="col-sm-7 form-control-plaintext">@(Model.Customer?.Region?.Name ?? "غير متوفر")</dd>
+                                
+                                <dt class="col-sm-5 unified-form-label">رقم الهاتف:</dt>
+                                <dd class="col-sm-7 form-control-plaintext">
+                                    <i class="fas fa-phone text-primary me-1"></i> @(Model.Customer?.User?.PhoneNumber ?? "غير متوفر")
+                                </dd>
+                            </dl>
+
+                            <!-- معلومات السائق -->
+                            @if (Model.Driver != null)
+                            {
+                                <h5 class="unified-title h5 border-bottom pb-2 mb-3 mt-4">معلومات السائق</h5>
+                                <dl class="row">
+                                    <dt class="col-sm-5 unified-form-label">اسم السائق:</dt>
+                                    <dd class="col-sm-7 form-control-plaintext">@(Model.Driver.User?.FullName ?? "غير متوفر")</dd>
+                                    
+                                    <dt class="col-sm-5 unified-form-label">رقم هاتف السائق:</dt>
+                                    <dd class="col-sm-7 form-control-plaintext">
+                                        <a href="tel:@Model.Driver.User?.PhoneNumber" class="text-primary text-decoration-none">
+                                            <i class="fas fa-phone me-1"></i> @(Model.Driver.User?.PhoneNumber ?? "غير متوفر")
+                                        </a>
+                                    </dd>
+                                </dl>
+                            }
+                        </div>
+                    </div>
+                    
+                    <!-- ===================== قسم التقييم ===================== -->
+                    @if (Model.Status == "Delivered" && Model.Rating.HasValue)
+                    {
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 class="unified-title h5 border-bottom pb-2 mb-3">تقييم الخدمة</h5>
+                                <dl class="row">
+                                    <dt class="col-sm-3 unified-form-label">تقييم العميل:</dt>
+                                    <dd class="col-sm-9 form-control-plaintext text-warning fs-5">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="fas fa-star @(i <= Model.Rating ? "" : "text-muted")"></i>
+                                        }
+                                    </dd>
+                                    
+                                    @if (!string.IsNullOrEmpty(Model.Comment))
+                                    {
+                                        <dt class="col-sm-3 unified-form-label">تعليق العميل:</dt>
+                                        <dd class="col-sm-9 form-control-plaintext">
+                                            <em class="d-block p-2 bg-light rounded">"@Model.Comment"</em>
+                                        </dd>
+                                    }
+                                </dl>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- ===================== أزرار الإجراءات السفلية ===================== -->
+                <div class="card-footer text-start">
+                    <!-- زر الحذف (يظهر للمدير فقط) -->
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <form asp-controller="Admin" asp-action="DeleteOrder" asp-route-id="@Model.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('هل أنت متأكد من حذف هذا الطلب بشكل نهائي؟');">
+                                <i class="fas fa-trash-alt me-1"></i> حذف الطلب
+                            </button>
+                        </form>
+                    }
+                    
+                    <!-- زر العودة (يختلف حسب دور المستخدم) -->
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="@Url.Action("ManageOrders", "Admin")" class="btn btn-secondary">
+                            <i class="fas fa-arrow-right me-1"></i> العودة لإدارة الطلبات
+                        </a>
+                    }
+                    else if (User.IsInRole("Customer"))
+                    {
+                         <a href="@Url.Action("TrackOrders", "Customer")" class="btn btn-secondary">
+                            <i class="fas fa-arrow-right me-1"></i> العودة لطلباتي
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

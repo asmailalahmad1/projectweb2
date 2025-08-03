@@ -1,0 +1,195 @@
+@model CreateOrderViewModel
+@{
+    ViewData["Title"] = "طلب جديد";
+}
+
+<!-- ======================================================= -->
+<!-- ==========         Create Order Styles         ========== -->
+<!-- ======================================================= -->
+<style>
+    /* Color Palette Variables */
+    :root {
+        --main-blue: #0077B6; /* أزرق ماء رئيسي */
+        --sky-blue: #90E0EF; /* أزرق سماوي */
+        --white: #FFFFFF; /* أبيض نقي */
+        --soft-gray: #E0E0E0; /* رمادي ناعم */
+        --aqua-green: #00B4D8; /* أخضر مائي */
+        --dark-blue: #03045E; /* أزرق داكن جدًا */
+    }
+
+    /* Form Card */
+    .order-form-card {
+        background-color: var(--white);
+        border: 1px solid var(--soft-gray);
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(3, 4, 94, 0.08);
+        overflow: hidden; /* To ensure header corners are rounded */
+    }
+
+        /* Card Header */
+        .order-form-card .card-header {
+            background-color: var(--dark-blue);
+            color: var(--white);
+            border-bottom: none;
+            padding: 1.25rem;
+        }
+
+            .order-form-card .card-header h4 {
+                color: var(--white);
+                font-weight: bold;
+            }
+
+        /* Form Elements */
+        .order-form-card .form-label {
+            color: var(--dark-blue);
+            font-weight: 500;
+        }
+
+        .order-form-card .form-control {
+            border: 2px solid var(--soft-gray);
+            background-color: #f7f9fc;
+            padding: 10px;
+            border-radius: 8px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .order-form-card .form-control:focus {
+                border-color: var(--main-blue);
+                background-color: var(--white);
+                box-shadow: 0 0 0 0.25rem rgba(0, 119, 182, 0.2);
+            }
+
+    .form-info p {
+        margin-bottom: 0;
+        font-size: 1.1rem;
+    }
+
+    .price-highlight {
+        color: var(--main-blue);
+        font-weight: bold;
+    }
+
+    /* Total Price Alert Box */
+    .total-price-alert {
+        background-color: var(--sky-blue);
+        color: var(--dark-blue);
+        border: 1px solid var(--main-blue);
+        border-radius: 8px;
+        font-size: 1.1rem;
+    }
+
+        .total-price-alert #totalPrice {
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+    /* Buttons */
+    .btn-submit-order {
+        background-color: var(--aqua-green);
+        color: var(--white);
+        border: none;
+        padding: 10px 25px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-submit-order:hover {
+            background-color: var(--main-blue);
+        }
+
+    .btn-back {
+        background-color: var(--soft-gray);
+        color: #343a40;
+        border: none;
+        padding: 10px 25px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-back:hover {
+            background-color: #ced4da;
+        }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card order-form-card">
+            <div class="card-header">
+                <h4><i class="fas fa-file-alt"></i> طلب جديد من @Model.TankName</h4>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="CreateOrder" method="post">
+                    <input type="hidden" asp-for="TankId" />
+                    <input type="hidden" asp-for="TankName" />
+                    <input type="hidden" asp-for="PricePerBarrel" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row mb-4 form-info">
+                        <div class="col-md-6">
+                            <label class="form-label"><strong>اسم الخزان:</strong></label>
+                            <p class="form-control-plaintext">@Model.TankName</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><strong>سعر البرميل:</strong></label>
+                            <p class="form-control-plaintext price-highlight">@Model.PricePerBarrel.ToString("C")</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label asp-for="Quantity" class="form-label fs-5"></label>
+                        <input asp-for="Quantity" class="form-control form-control-lg" id="quantity" placeholder="ادخل الكمية بالبرميل" />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+
+                    <div class="alert total-price-alert mb-4">
+                        <strong class="align-middle">إجمالي السعر:</strong>
+                        <span id="totalPrice" class="align-middle">@Model.TotalPrice.ToString("C")</span>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="@Url.Action("Tanks", "Customer")" class="btn btn-back">
+                            <i class="fas fa-arrow-left"></i> العودة
+                        </a>
+                        <button type="submit" class="btn btn-submit-order">
+                            <i class="fas fa-paper-plane"></i> إرسال الطلب
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Ensure the script runs after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInput = document.getElementById('quantity');
+            const totalPriceSpan = document.getElementById('totalPrice');
+            // Use the model value passed from C# and ensure it's a number
+            const pricePerBarrel = parseFloat('@Model.PricePerBarrel.ToString(System.Globalization.CultureInfo.InvariantCulture)');
+
+            function updatePrice() {
+                const quantity = parseInt(quantityInput.value) || 0;
+                const totalPrice = quantity * pricePerBarrel;
+
+                // Format currency for display (using SAR as an example)
+                totalPriceSpan.textContent = totalPrice.toLocaleString('ar-SA', {
+                    style: 'currency',
+                    currency: 'SAR',
+                    minimumFractionDigits: 2
+                });
+            }
+
+            // Add event listener to the input field
+            quantityInput.addEventListener('input', updatePrice);
+
+            // Initial calculation on page load
+            updatePrice();
+        });
+    </script>
+}

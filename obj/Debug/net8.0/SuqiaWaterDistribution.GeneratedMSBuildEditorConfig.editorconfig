@@ -1,0 +1,161 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = SuqiaWaterDistribution
+build_property.RootNamespace = SuqiaWaterDistribution
+build_property.ProjectDir = C:\Users\1575a\Downloads\SuqiaWaterDistribution_Final_Updated\SuqiaWaterDistribution_ColorImproved_Final\SuqiaWaterDistribution\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\1575a\Downloads\SuqiaWaterDistribution_Final_Updated\SuqiaWaterDistribution_ColorImproved_Final\SuqiaWaterDistribution
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/AssignDriver.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQXNzaWduRHJpdmVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/CreateRegion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ3JlYXRlUmVnaW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/CreateTank.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ3JlYXRlVGFuay5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/CustomerDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ3VzdG9tZXJEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/DriverDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRHJpdmVyRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/EditCustomer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdEN1c3RvbWVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/EditDriver.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdERyaXZlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/EditRegion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFJlZ2lvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/EditTank.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFRhbmsuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/ManageCustomers.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlQ3VzdG9tZXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/ManageDrivers.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlRHJpdmVycy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/ManageOrders.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlT3JkZXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/ManageRegions.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlUmVnaW9ucy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/ManageTanks.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlVGFua3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/OrderDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cT3JkZXJEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/RegionDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUmVnaW9uRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/Statistics.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU3RhdGlzdGljcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Admin/TankDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVGFua0RldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Customer/CreateOrder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJcQ3JlYXRlT3JkZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Customer/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJcRGFzaGJvYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Customer/OrderDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJcT3JkZXJEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Customer/Tanks.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJcVGFua3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Customer/TrackOrders.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJcVHJhY2tPcmRlcnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Driver/AssignedOrders.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRHJpdmVyXEFzc2lnbmVkT3JkZXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Driver/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRHJpdmVyXERhc2hib2FyZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/1575a/Downloads/SuqiaWaterDistribution_Final_Updated/SuqiaWaterDistribution_ColorImproved_Final/SuqiaWaterDistribution/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

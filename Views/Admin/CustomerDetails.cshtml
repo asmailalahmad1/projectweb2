@@ -1,0 +1,174 @@
+@model Customer
+@{
+    ViewData["Title"] = "تفاصيل العميل";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="unified-title h3">
+                        <i class="fas fa-user"></i> تفاصيل العميل: @Model.User.FullName
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">الاسم الكامل:</label>
+                                <p class="form-control-plaintext">@Model.User.FullName</p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">البريد الإلكتروني:</label>
+                                <p class="form-control-plaintext">@Model.User.Email</p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">رقم الهاتف:</label>
+                                <p class="form-control-plaintext">
+                                    <a href="tel:@Model.User.PhoneNumber" class="text-primary">
+                                        <i class="fas fa-phone"></i> @Model.User.PhoneNumber
+                                    </a>
+                                </p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">العنوان:</label>
+                                <p class="form-control-plaintext">@Model.User.Address</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">المنطقة:</label>
+                                <p class="form-control-plaintext">@Model.Region.Name</p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">تاريخ التسجيل:</label>
+                                <p class="form-control-plaintext">@Model.User.CreatedAt.ToString("dd/MM/yyyy")</p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">الحساب مؤكد:</label>
+                                <p class="form-control-plaintext">
+                                    @if (Model.User.EmailConfirmed)
+                                    {
+                                        <span class="badge bg-success">نعم</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">لا</span>
+                                    }
+                                </p>
+                            </div>
+                            
+                            <div class="unified-form-group">
+                                <label class="unified-form-label">حالة الحساب:</label>
+                                <p class="form-control-plaintext">
+                                    @if (Model.User.LockoutEnd == null || Model.User.LockoutEnd < DateTimeOffset.Now)
+                                    {
+                                        <span class="badge bg-success">نشط</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">محظور</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr />
+                    
+                    <h4 class="unified-title h4">إحصائيات الطلبات</h4>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="unified-stat-card">
+                                <div class="unified-stat-number">@Model.Orders.Count</div>
+                                <div class="unified-stat-label">إجمالي الطلبات</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="unified-stat-card">
+                                <div class="unified-stat-number">@Model.Orders.Count(o => o.Status == "Delivered")</div>
+                                <div class="unified-stat-label">طلبات مكتملة</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="unified-stat-card">
+                                <div class="unified-stat-number">@Model.Orders.Count(o => o.Status == "New" || o.Status == "Accepted" || o.Status == "InDelivery")</div>
+                                <div class="unified-stat-label">طلبات نشطة</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="unified-stat-card">
+                                <div class="unified-stat-number">@Model.Orders.Where(o => o.Rating.HasValue).Average(o => o.Rating.Value).ToString("F1")</div>
+                                <div class="unified-stat-label">متوسط التقييم</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    @if (Model.Orders.Any())
+                    {
+                        <hr />
+                        <h4 class="unified-title h4">آخر الطلبات</h4>
+                        <div class="table-responsive">
+                            <table class="unified-table">
+                                <thead>
+                                    <tr>
+                                        <th>رقم الطلب</th>
+                                        <th>الخزان</th>
+                                        <th>الكمية</th>
+                                        <th>السعر</th>
+                                        <th>التاريخ</th>
+                                        <th>الحالة</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.Orders.OrderByDescending(o => o.OrderTime).Take(5))
+                                    {
+                                        <tr>
+                                            <td>@order.Id</td>
+                                            <td>@order.Tank.Name</td>
+                                            <td>@order.Quantity برميل</td>
+                                            <td>@order.Price.ToString("C")</td>
+                                            <td>@order.OrderTime.ToString("dd/MM/yyyy")</td>
+                                            <td>
+                                                <span class="badge @(
+                                                    order.Status == "New" ? "bg-warning" :
+                                                    order.Status == "Accepted" ? "bg-primary" :
+                                                    order.Status == "InDelivery" ? "bg-info" :
+                                                    order.Status == "Delivered" ? "bg-success" :
+                                                    order.Status == "Rejected" ? "bg-danger" :
+                                                    order.Status == "Cancelled" ? "bg-secondary" : "bg-secondary")">
+                                                    @(order.Status == "New" ? "جديد" :
+                                                      order.Status == "Accepted" ? "مقبول" :
+                                                      order.Status == "InDelivery" ? "قيد التوصيل" :
+                                                      order.Status == "Delivered" ? "تم التسليم" :
+                                                      order.Status == "Rejected" ? "مرفوض" :
+                                                      order.Status == "Cancelled" ? "ملغى" : order.Status)
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <a href="/Admin/EditCustomer/@Model.Id" class="btn btn-edit">
+                        <i class="fas fa-edit"></i> تعديل العميل
+                    </a>
+                    <a href="/Admin/ManageCustomers" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i> العودة للقائمة
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

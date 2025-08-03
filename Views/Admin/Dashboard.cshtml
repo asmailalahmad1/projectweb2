@@ -1,0 +1,236 @@
+@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "لوحة تحكم الإدارة";
+}
+
+<div class="animate-fade-in-up">
+    <!-- العنوان الرئيسي -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="unified-title h2">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                لوحة تحكم الإدارة
+            </h1>
+            <p class="text-secondary">مرحباً بك في لوحة تحكم نظام سقيا لإدارة المياه</p>
+        </div>
+    </div>
+
+    <!-- بطاقات الإحصائيات -->
+    <div class="row mb-5">
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="unified-stat-card">
+                <div class="unified-icon purple mb-3 mx-auto">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <div class="unified-stat-number">@ViewBag.TotalOrders</div>
+                <div class="unified-stat-label">إجمالي الطلبات</div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="unified-stat-card">
+                <div class="unified-icon orange mb-3 mx-auto">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+                <div class="unified-stat-number">@ViewBag.PendingOrders</div>
+                <div class="unified-stat-label">الطلبات المعلقة</div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="unified-stat-card">
+                <div class="unified-icon green mb-3 mx-auto">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="unified-stat-number">@ViewBag.CompletedOrders</div>
+                <div class="unified-stat-label">الطلبات المكتملة</div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="unified-stat-card">
+                <div class="unified-icon blue mb-3 mx-auto">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="unified-stat-number">@ViewBag.TotalCustomers</div>
+                <div class="unified-stat-label">إجمالي الزبائن</div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="unified-stat-card">
+                <div class="unified-icon red mb-3 mx-auto">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="unified-stat-number">@ViewBag.TotalDrivers</div>
+                <div class="unified-stat-label">إجمالي السائقين</div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <a href="@Url.Action("Statistics")" class="text-decoration-none">
+                <div class="unified-stat-card">
+                    <div class="unified-icon purple mb-3 mx-auto">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="unified-stat-number">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                    <div class="unified-stat-label">الإحصائيات</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- قسم إدارة النظام -->
+        <div class="col-lg-8 mb-4">
+            <div class="unified-card">
+                <h3 class="unified-title h4 mb-4">
+                    <i class="fas fa-cogs me-2"></i>
+                    إدارة النظام
+                </h3>
+                
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <a href="@Url.Action("ManageOrders")" class="unified-btn primary w-100 text-decoration-none">
+                            <i class="fas fa-clipboard-list me-2"></i>
+                            إدارة الطلبات
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <a href="@Url.Action("ManageCustomers")" class="unified-btn success w-100 text-decoration-none">
+                            <i class="fas fa-users me-2"></i>
+                            إدارة الزبائن
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <a href="@Url.Action("ManageDrivers")" class="unified-btn warning w-100 text-decoration-none">
+                            <i class="fas fa-truck me-2"></i>
+                            إدارة السائقين
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <a href="@Url.Action("ManageRegions")" class="unified-btn info w-100 text-decoration-none">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            إدارة المناطق
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <a href="@Url.Action("ManageTanks")" class="unified-btn danger w-100 text-decoration-none">
+                            <i class="fas fa-database me-2"></i>
+                            إدارة الخزانات
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <a href="@Url.Action("Statistics")" class="unified-btn primary w-100 text-decoration-none">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            الإحصائيات
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- قسم آخر الطلبات -->
+        <div class="col-lg-4 mb-4">
+            <div class="unified-card">
+                <h3 class="unified-title h4 mb-4">
+                    <i class="fas fa-history me-2"></i>
+                    آخر الطلبات
+                </h3>
+                
+                <div style="max-height: 400px; overflow-y: auto;">
+                    @if (Model.Any())
+                    {
+                        @foreach (var order in Model)
+                        {
+                            <div class="d-flex align-items-center p-3 mb-3 rounded" style="background: rgba(107, 70, 193, 0.1); border-right: 4px solid var(--primary-purple);">
+                                <div class="unified-icon 
+                                    @(order.Status == "Pending" ? "orange" :
+                                      order.Status == "Accepted" ? "blue" :
+                                      order.Status == "InDelivery" ? "purple" :
+                                      order.Status == "Delivered" ? "green" : "red") me-3">
+                                    <i class="fas fa-
+                                        @(order.Status == "Pending" ? "clock" :
+                                          order.Status == "Accepted" ? "check" :
+                                          order.Status == "InDelivery" ? "truck" :
+                                          order.Status == "Delivered" ? "check-circle" : "times")"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1 text-primary">طلب #@order.Id</h6>
+                                    <p class="mb-1 text-secondary small">@order.Customer.User.FullName</p>
+                                    <p class="mb-1 text-muted small">@order.Tank.Name - @order.Quantity برميل</p>
+                                    <small class="text-muted">@order.OrderTime.ToString("dd/MM/yyyy")</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge 
+                                        @(order.Status == "Pending" ? "bg-warning" :
+                                          order.Status == "Accepted" ? "bg-info" :
+                                          order.Status == "InDelivery" ? "bg-primary" :
+                                          order.Status == "Delivered" ? "bg-success" : "bg-danger")">
+                                        @(order.Status == "Pending" ? "معلق" :
+                                          order.Status == "Accepted" ? "مقبول" :
+                                          order.Status == "InDelivery" ? "قيد التوصيل" :
+                                          order.Status == "Delivered" ? "تم التسليم" :
+                                          order.Status == "Rejected" ? "مرفوض" : "ملغى")
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                        
+                        <div class="text-center mt-3">
+                            <a href="@Url.Action("ManageOrders")" class="unified-btn primary">
+                                <i class="fas fa-eye me-2"></i>
+                                عرض جميع الطلبات
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <div class="unified-icon purple mb-3 mx-auto">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <p class="text-muted">لا توجد طلبات حتى الآن</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- إضافة سريعة -->
+    <div class="row">
+        <div class="col-12">
+            <div class="unified-card">
+                <h3 class="unified-title h4 mb-4">
+                    <i class="fas fa-plus-circle me-2"></i>
+                    إضافة سريعة
+                </h3>
+                
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <a href="@Url.Action("CreateRegion")" class="unified-btn success w-100 text-decoration-none">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            إضافة منطقة جديدة
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="@Url.Action("CreateTank")" class="unified-btn info w-100 text-decoration-none">
+                            <i class="fas fa-database me-2"></i>
+                            إضافة خزان جديد
+                        </a>
+                    </div>
+                   @*  <div class="col-md-3 mb-3">
+                        <a href="@Url.Action("AssignDriver")" class="unified-btn warning w-100 text-decoration-none">
+                            <i class="fas fa-user-plus me-2"></i>
+                            تعيين سائق
+                        </a>
+                    </div> *@
+                    <div class="col-md-3 mb-3">
+                        <a href="@Url.Action("Statistics")" class="unified-btn primary w-100 text-decoration-none">
+                            <i class="fas fa-chart-line me-2"></i>
+                            عرض التقارير
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

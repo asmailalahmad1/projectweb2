@@ -1,0 +1,262 @@
+@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "تتبع الطلبات";
+}
+
+<!-- ======================================================= -->
+<!-- ==========        Order Tracking Styles        ========== -->
+<!-- ======================================================= -->
+<style>
+    /* يمكنك إبقاء قسم الـ Style كما هو، لا توجد به مشاكل */
+    :root {
+        --main-blue: #0077B6;
+        --sky-blue: #90E0EF;
+        --white: #FFFFFF;
+        --soft-gray: #E0E0E0;
+        --aqua-green: #00B4D8;
+        --dark-blue: #03045E;
+        --table-stripe: #f7f9fc;
+        --danger-red: #d9534f;
+        --warning-orange: #ffc107;
+        --secondary-gray: #6c757d;
+        --success-green: #28a745;
+        --info-cyan: #17a2b8;
+    }
+
+    .page-title {
+        color: var(--dark-blue);
+        border-bottom: 2px solid var(--sky-blue);
+        padding-bottom: 10px;
+        margin-bottom: 2rem;
+    }
+
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table-custom thead tr {
+            background-color: var(--dark-blue);
+            color: var(--white);
+            text-align: right;
+        }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--white);
+        min-width: 80px;
+        text-align: center;
+    }
+
+    .status-Pending {
+        background-color: var(--warning-orange);
+    }
+
+    .status-Accepted {
+        background-color: var(--info-cyan);
+    }
+
+    .status-InDelivery {
+        background-color: var(--main-blue);
+    }
+
+    .status-Delivered {
+        background-color: var(--success-green);
+    }
+
+    .status-Rejected {
+        background-color: var(--danger-red);
+    }
+
+    .status-Cancelled {
+        background-color: var(--secondary-gray);
+    }
+
+    .rating-stars-display {
+        color: var(--warning-orange);
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="page-title"><i class="fas fa-receipt me-2"></i> طلباتي</h2>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive mt-4">
+            <table class="table table-hover table-custom">
+                <thead>
+                    <tr>
+                        <th>رقم الطلب</th>
+                        <th>الخزان</th>
+                        <th>الكمية</th>
+                        <th>السعر</th>
+                        <th>تاريخ الطلب</th>
+                        <th>الحالة</th>
+                        <th>السائق</th>
+                        <th class="text-center">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td><strong>#@order.Id</strong></td>
+                            <td>@(order.Tank?.Name ?? "N/A")</td>
+                            <td>@order.Quantity برميل</td>
+                            <td>@order.Price.ToString("C", new System.Globalization.CultureInfo("ar-SA"))</td>
+                            <td>@order.OrderTime.ToString("dd/MM/yyyy, hh:mm tt")</td>
+                            <td>
+                                <span class="status-badge status-@order.Status">
+                                    @switch (order.Status)
+                                    {
+                                        case "Pending":
+                                            <text>معلق</text>
+                                            ; break;
+                                        case "Accepted":
+
+                                            <text>مقبول</text>
+                                            ; break;
+                                        case "InDelivery":
+
+                                            <text>قيد التوصيل</text>
+                                            ; break;
+                                        case "Delivered":
+
+                                            <text>تم التسليم</text>
+                                            ; break;
+                                        case "Rejected":
+
+                                            <text>مرفوض</text>
+                                            ; break;
+                                        default:
+
+                                            <text>ملغى</text>
+                                            ; break;
+                                    }
+                                </span>
+                            </td>
+                            <td>
+                                @if (order.Driver != null)
+                                {
+                                    @order.Driver.User?.FullName
+                                }
+                                else
+                                {
+                                    <span class="text-muted">لم يتم التعيين</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <div class="action-buttons d-inline-flex align-items-center">
+                                    <!-- زر التفاصيل الصحيح -->
+                                    <a href="@Url.Action("OrderDetails", "Customer", new { id = order.Id })" class="btn btn-info btn-sm" title="عرض التفاصيل">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                               @*      @if (order.Status == "Pending" || order.Status == "Cancelled" || order.Status == "Rejected")
+                                    {
+                                        <!-- === هذا هو فورم الحذف الجديد === -->
+                                        <form asp-action="DeleteOrder" method="post" class="d-inline ms-1">
+                                            <!-- لاحظ أننا نستخدم نفس اسم الحقل "id" -->
+                                            <input type="hidden" name="id" value="@order.Id" />
+                                            <button type="submit" class="btn btn-sm btn-danger" title="حذف الطلب"
+                                                    onclick="return confirm('هل أنت متأكد من حذف هذا الطلب نهائيًا؟ لا يمكن التراجع عن هذا الإجراء.');">
+                                                <i class="fas fa-trash-alt"></i> <!-- غيرنا الأيقونة أيضًا -->
+                                            </button>
+                                        </form>
+                                    } *@
+                                    @if (order.Status == "Pending")
+                                    {
+                                        <!-- زر إلغاء الطلب -->
+                                        <form asp-action="CancelOrder" method="post" class="d-inline ms-1">
+                                            <input type="hidden" name="id" value="@order.Id" />
+                                            <button type="submit" class="btn btn-sm btn-danger" title="إلغاء الطلب"
+                                                    onclick="return confirm('هل أنت متأكد من إلغاء الطلب؟')">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (order.Status == "Delivered" && order.Rating == null)
+                                    {
+                                        <!-- زر التقييم -->
+                                        <button type="button" class="btn btn-sm btn-warning ms-1" title="تقييم الخدمة"
+                                                data-bs-toggle="modal" data-bs-target="#rateModal_@order.Id">
+                                            <i class="fas fa-star"></i>
+                                        </button>
+                                    }
+                                    else if (order.Rating != null)
+                                    {
+                                        <!-- عرض التقييم -->
+                                        <span class="rating-stars-display ms-2" title="تقييمك">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="fas fa-star @(i <= order.Rating ? "" : "text-muted")"></i>
+                                            }
+                                        </span>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info mt-4 text-center">
+            <h5><i class="fas fa-info-circle me-2"></i> لا توجد طلبات حتى الآن.</h5>
+            <a href="@Url.Action("Tanks", "Customer")" class="btn btn-primary mt-2">
+                <i class="fas fa-plus me-1"></i> اطلب الآن
+            </a>
+        </div>
+    }
+</div>
+
+<!-- Modals for Rating -->
+@foreach (var order in Model.Where(o => o.Status == "Delivered" && o.Rating == null))
+{
+    <div class="modal fade" id="rateModal_@order.Id" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">تقييم الخدمة للطلب رقم #@order.Id</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form asp-action="RateOrder" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="orderId" value="@order.Id" />
+                        <div class="mb-3">
+                            <label class="form-label">التقييم:</label>
+                            <select name="rating" class="form-select" required>
+                                <option value="" disabled selected>-- اختر تقييمك --</option>
+                                <option value="5">⭐⭐⭐⭐⭐ (ممتاز)</option>
+                                <option value="4">⭐⭐⭐⭐ (جيد جدًا)</option>
+                                <option value="3">⭐⭐⭐ (جيد)</option>
+                                <option value="2">⭐⭐ (مقبول)</option>
+                                <option value="1">⭐ (سيء)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">تعليق (اختياري):</label>
+                            <textarea name="comment" class="form-control" rows="3" placeholder="شاركنا رأيك..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                        <button type="submit" class="btn btn-primary">إرسال التقييم</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
